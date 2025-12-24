@@ -79,10 +79,18 @@ header {
     width: $width-max - 50px;
   }
 
+  .dark-mode-switch-wrapper {
+    display: flex;
+    align-items: center;
+    min-width: 58px; // Reserve space for the switch
+    min-height: 38px;
+  }
+
   @media all and (max-width: ($width-max - 1px)) {
     max-width: 100%;
     width: 100%;
 
+    .dark-mode-switch-wrapper,
     .#{$dark-class}-switch {
       display: none;
     }

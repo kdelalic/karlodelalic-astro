@@ -10,6 +10,9 @@ const pages = [
 ]
 
 const currentPath = Astro.url.pathname
+
+// Read theme preference for SSR
+const themeCookie = Astro.cookies.get('theme')?.value;
 ---
 
 <header>
@@ -42,7 +45,9 @@ const currentPath = Astro.url.pathname
       ))
     }
   </nav>
-  <DarkModeSwitch client:load transition:persist />
+  <div class="dark-mode-switch-wrapper">
+    <DarkModeSwitch client:load />
+  </div>
 </header>
 
 <script>

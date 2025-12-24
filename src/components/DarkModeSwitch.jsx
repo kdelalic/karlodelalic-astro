@@ -1,92 +1,99 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import Switch from "@mui/material/Switch";
+import IconButton from '@mui/material/IconButton';
 
-const DarkSwitch = styled(Switch)(() => ({
-  '& .MuiSwitch-switchBase': {
-    color: "#6772e5",
-    '&.Mui-checked': {
-      color: "#6772e5",
-      "&:hover": {
-        backgroundColor: "rgba(255, 255, 255, 0.08)",
-      },
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: '#fff',
-      },
-    },
+const StyledIconButton = styled(IconButton)(() => ({
+  width: 44,
+  height: 44,
+  padding: 10,
+  borderRadius: '50%',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  '&:hover': {
+    backgroundColor: 'rgba(103, 114, 229, 0.1)',
+    transform: 'scale(1.1)',
   },
-  checked: {},
-  '& .MuiSwitch-track': {
-    opacity: 1,
-    backgroundColor: "#252525",
+  '& .icon': {
+    width: 24,
+    height: 24,
+    transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+    display: 'inline-block',
   },
-  '&.no-transition .MuiSwitch-switchBase': {
-    transition: 'none',
-  },
-  '&.no-transition .MuiSwitch-track': {
-    transition: 'none',
-  },
-  '&.hidden': {
-    opacity: 0,
+  '&.rotate .icon': {
+    transform: 'rotate(180deg) scale(1.1)',
   },
 }));
 
+// Sun SVG Icon
+const SunIcon = () => (
+  <svg
+    className="icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#FDB813"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="5" fill="#FDB813" />
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+);
+
+// Moon SVG Icon
+const MoonIcon = () => (
+  <svg
+    className="icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#94A3B8"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ transform: 'scaleX(-1)' }}
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#94A3B8" />
+  </svg>
+);
+
 const DarkModeSwitch = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [hasHydrated, setHasHydrated] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Sync state with current theme from both window.__theme and DOM
-      const syncTheme = () => {
-        const isDark = window.__theme === 'dark' || document.documentElement.classList.contains('dark');
-        setIsDarkMode(isDark);
-      };
-
-      // Immediately sync on mount
-      syncTheme();
-
-      // Enable transitions after initial sync
-      setTimeout(() => setHasHydrated(true), 0);
-
-      // Listen for storage events to sync across tabs
-      const handleStorageChange = (e) => {
-        if (e.key === 'preferred-theme') {
-          setIsDarkMode(e.newValue === 'dark');
-        }
-      };
-
-      window.addEventListener('storage', handleStorageChange);
-
-      // Also sync on focus in case theme changed in another tab
-      window.addEventListener('focus', syncTheme);
-
-      return () => {
-        window.removeEventListener('storage', handleStorageChange);
-        window.removeEventListener('focus', syncTheme);
-      };
-    }
+    // Read theme immediately
+    const currentTheme = window.__theme === 'dark';
+    setIsDark(currentTheme);
+    setMounted(true);
   }, []);
 
-  const onChange = useCallback(
-    e => {
-      const isDarkMode = e.target.checked;
-      setIsDarkMode(isDarkMode);
-      if (typeof window !== 'undefined') {
-        window.__setPreferredTheme(isDarkMode ? 'dark' : 'light');
-      }
-    },
-    []
-  );
+  const handleClick = useCallback(() => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    window.__setPreferredTheme(newTheme ? 'dark' : 'light');
+  }, [isDark]);
 
-  return <DarkSwitch
-    className={hasHydrated ? "dark-switch" : "dark-switch hidden"}
-    checked={isDarkMode}
-    onChange={onChange}
-    value="darkMode"
-    inputProps={{ "aria-label": "dark mode switch" }}
-  />;
+  return (
+    <div style={{ width: 44, height: 44, position: 'relative' }}>
+      <StyledIconButton
+        onClick={handleClick}
+        className={isDark ? 'rotate' : ''}
+        aria-label="Toggle dark mode"
+        style={{
+          opacity: mounted ? 1 : 0,
+          transition: 'opacity 0.15s ease-in'
+        }}
+      >
+        {isDark ? <MoonIcon /> : <SunIcon />}
+      </StyledIconButton>
+    </div>
+  );
 };
 
 export default DarkModeSwitch;
