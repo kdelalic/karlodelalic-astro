@@ -1,0 +1,19 @@
+---
+import "./chip.scss";
+
+interface Props {
+  active?: boolean;
+  label: string;
+  "data-tag"?: string;
+}
+
+const { active = false, label, "data-tag": dataTag } = Astro.props;
+
+const classNames = ["chip"];
+if (active) classNames.push("active");
+if (dataTag) classNames.push("button");
+---
+
+<button class:list={classNames} data-tag={dataTag}>
+  <span class="chip__label noselect">{label}</span>
+</button>

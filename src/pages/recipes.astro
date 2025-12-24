@@ -1,45 +1,29 @@
 ---
 import { getCollection } from 'astro:content';
-import { getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import RecipesClient from '../components/RecipesClient';
+import RecipesClient from '../components/RecipesClient.astro';
 
 const allRecipes = await getCollection('recipes');
 
-// Prepare recipes data for the client component with optimized images
-const recipesData = await Promise.all(
-  allRecipes.map(async (recipe) => {
-    let imageSrc = null;
-
-    if (recipe.data.image) {
-      // Get the optimized image using Astro's getImage
-      const optimizedImage = await getImage({
-        src: recipe.data.image,
-        width: 600,
-        height: 400,
-        format: 'webp',
-      });
-      imageSrc = optimizedImage.src;
-    }
-
-    return {
-      id: recipe.id,
-      title: recipe.data.title,
-      tags: recipe.data.tags || [],
-      source: recipe.data.source,
-      notes: recipe.data.notes,
-      type: recipe.data.type,
-      slug: recipe.slug.includes('custom-recipes') ? `/custom-recipes/${recipe.slug.split('/')[1]}` : null,
-      image: imageSrc,
-    };
-  })
-);
+// Prepare recipes data
+const recipesData = allRecipes.map((recipe) => {
+  return {
+    id: recipe.id,
+    title: recipe.data.title,
+    tags: recipe.data.tags || [],
+    source: recipe.data.source,
+    notes: recipe.data.notes,
+    type: recipe.data.type,
+    slug: recipe.slug.includes('custom-recipes') ? `/custom-recipes/${recipe.slug.split('/')[1]}` : null,
+    image: recipe.data.image,
+  };
+});
 
 const keywords = ['karlo delalic', 'portfolio', 'distributed systems', 'software engineer', 'recipes'];
 ---
 
 <BaseLayout title="Recipes" keywords={keywords}>
   <Header slot="header" />
-  <RecipesClient client:load recipes={recipesData} />
+  <RecipesClient recipes={recipesData} />
 </BaseLayout>
