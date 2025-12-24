@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets"
 import DarkModeSwitch from "./DarkModeSwitch"
+import logo from "../assets/logo.svg"
 import "./header.scss"
 
 const pages = [
@@ -18,7 +20,7 @@ const themeCookie = Astro.cookies.get('theme')?.value;
 <header>
   <div class="brand">
     <a href="/" aria-label="Brand Logo" class="brand__logo">
-      <img src="/logo.svg" alt="Logo" />
+      <Image src={logo} alt="Logo" width={40} height={40} loading="eager" />
     </a>
     <span class="brand__name">Karlo Delalic</span>
   </div>
