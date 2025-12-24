@@ -1,15 +1,14 @@
 backend:
   name: git-gateway
-  repo: kdelalic/karlodelalic.me
-  branch: master
+  branch: main
 
-media_folder: static/img
+media_folder: public/img
 public_folder: /img
 
 collections:
   - name: 'recipes'
     label: 'Recipe'
-    folder: 'content/markdown/recipes'
+    folder: 'src/content/recipes'
     create: true
     slug: 'index'
     media_folder: ''
@@ -26,7 +25,7 @@ collections:
       - { label: 'Type', name: 'type', widget: 'hidden', default: 'recipe' }
   - name: "custom-recipes"
     label: "Custom Recipe"
-    folder: "content/markdown/custom-recipes"
+    folder: "src/content/custom-recipes"
     create: true
     slug: 'index'
     path: '{{title}}/index'
