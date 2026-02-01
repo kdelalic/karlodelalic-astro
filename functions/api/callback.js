@@ -51,13 +51,20 @@ export async function onRequestGet(context) {
           // 2. Object: { token: TOKEN, provider: "github" } (some versions)
           
           function notify() {
-             const key = "authorization:" + provider + ":success:" + token;
-             
-             // Send to all origins since we might be developing on localhost
-             // but the auth callback runs on the production domain.
-             if (window.opener) {
-               window.opener.postMessage(key, "*");
+             if (!window.opener) {
+               console.error("No window.opener found");
+               return;
              }
+             
+             // Format 1: Simple string (Common)
+             window.opener.postMessage("authorization:" + provider + ":success:" + token, "*");
+             
+             // Format 2: JSON stringified object (Modern/Specific versions)
+             const jsonMessage = "authorization:" + provider + ":success:" + JSON.stringify({
+               token: token,
+               provider: provider
+             });
+             window.opener.postMessage(jsonMessage, "*");
           }
 
           // Send immediately
