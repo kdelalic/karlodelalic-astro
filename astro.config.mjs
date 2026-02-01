@@ -11,6 +11,7 @@ export default defineConfig({
     mdx(),
     sitemap(),
   ],
+  trailingSlash: 'never',
   build: {
     inlineStylesheets: 'always',
   },
