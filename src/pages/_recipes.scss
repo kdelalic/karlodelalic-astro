@@ -26,10 +26,16 @@
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    position: relative;
 
     &.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    &:has(.recipe__note-icon:hover),
+    &:has(.recipe__note-icon:focus) {
+      z-index: 100;
     }
   }
 }
