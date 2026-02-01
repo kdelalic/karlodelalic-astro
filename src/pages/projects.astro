@@ -6,25 +6,41 @@ import Project from "../components/Project.astro"
 
 const projects = await getCollection("projects")
 
-// Get all tech logos from the public directory
-const techLogosPath = "/tech-logos/"
+// Import all tech logos from the assets directory
+import reactjs from "../assets/tech-logos/reactjs.svg"
+import nodejs from "../assets/tech-logos/nodejs.svg"
+import firebase from "../assets/tech-logos/firebase.svg"
+import materialui from "../assets/tech-logos/material ui.svg"
+import socketio from "../assets/tech-logos/socket.io.svg"
+import docker from "../assets/tech-logos/docker.svg"
+import sass from "../assets/tech-logos/sass.svg"
+import astro from "../assets/tech-logos/astro.svg"
+import redux from "../assets/tech-logos/redux.svg"
+import latex from "../assets/tech-logos/latex.svg"
+import travisci from "../assets/tech-logos/travis-ci.svg"
+import preact from "../assets/tech-logos/preact.svg"
+import aws from "../assets/tech-logos/aws.svg"
+import azure from "../assets/tech-logos/azure.svg"
+import golang from "../assets/tech-logos/golang.svg"
+import arduino from "../assets/tech-logos/arduino.svg"
+
 const techLogos = {
-  reactjs: `${techLogosPath}reactjs.svg`,
-  nodejs: `${techLogosPath}nodejs.svg`,
-  firebase: `${techLogosPath}firebase.svg`,
-  "material ui": `${techLogosPath}material ui.svg`,
-  "socket.io": `${techLogosPath}socket.io.svg`,
-  docker: `${techLogosPath}docker.svg`,
-  sass: `${techLogosPath}sass.svg`,
-  astro: `${techLogosPath}astro.svg`,
-  redux: `${techLogosPath}redux.svg`,
-  latex: `${techLogosPath}latex.svg`,
-  "travis-ci": `${techLogosPath}travis-ci.svg`,
-  preact: `${techLogosPath}preact.svg`,
-  aws: `${techLogosPath}aws.svg`,
-  azure: `${techLogosPath}azure.svg`,
-  golang: `${techLogosPath}golang.svg`,
-  arduino: `${techLogosPath}arduino.svg`,
+  reactjs,
+  nodejs,
+  firebase,
+  "material ui": materialui,
+  "socket.io": socketio,
+  docker,
+  sass,
+  astro,
+  redux,
+  latex,
+  "travis-ci": travisci,
+  preact,
+  aws,
+  azure,
+  golang,
+  arduino,
 }
 
 const keywords = [
@@ -42,14 +58,6 @@ const keywords = [
   <div class="projects">
     {
       projects.map((project, index) => {
-        let projectLogoSrc = undefined
-        if (project.data.projectLogo) {
-          const logoFilename =
-            typeof project.data.projectLogo === "string"
-              ? project.data.projectLogo
-              : project.data.projectLogo.src.split("/").pop()
-          projectLogoSrc = `/projects/${project.slug}/${logoFilename}`
-        }
         // First 6 projects are above the fold
         const isAboveFold = index < 6
         return (
@@ -60,7 +68,7 @@ const keywords = [
             title={project.data.title}
             demo={project.data.demo}
             techLogos={techLogos}
-            projectLogo={projectLogoSrc}
+            projectLogo={project.data.projectLogo}
             isAboveFold={isAboveFold}
           />
         )

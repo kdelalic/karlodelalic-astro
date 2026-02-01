@@ -27,7 +27,7 @@ const recipes = defineCollection({
 
 const projects = defineCollection({
   type: 'content',
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string(),
     type: z.literal('project'),
@@ -35,7 +35,7 @@ const projects = defineCollection({
     github: z.string().optional(),
     technologies: z.array(z.string()).optional(),
     tags: z.array(z.string()).optional(),
-    projectLogo: z.string().optional(),
+    projectLogo: image().optional(),
   }),
 });
 
