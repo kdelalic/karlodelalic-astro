@@ -2,14 +2,14 @@
 title: "auto-resume"
 description: "Automatically generates and releases LaTeX-based resumes."
 type: "project"
-demo: "https://travis-ci.org/kdelalic/auto-resume"
+demo: "https://github.com/kdelalic/auto-resume/actions/workflows/ci.yml"
 github: "https://github.com/kdelalic/auto-resume"
 technologies: 
   - LaTeX
-  - Travis-CI
+  - GitHub Actions
 tags:
   - latex
-  - travis-ci
+  - github-actions
   - automation
   - resume
 projectLogo: "logo.svg"

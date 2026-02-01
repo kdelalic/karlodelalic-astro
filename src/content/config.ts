@@ -39,17 +39,8 @@ const projects = defineCollection({
   }),
 });
 
-const diveLogs = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    type: z.string().optional(),
-  }),
-});
-
 export const collections = {
   blog,
   recipes,
   projects,
-  'dive-logs': diveLogs,
 };

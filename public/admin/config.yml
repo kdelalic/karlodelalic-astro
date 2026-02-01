@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: kdelalic/karlodelalic.me
   branch: main
+  base_url: https://karlodelalic.me
+  auth_endpoint: api/auth
 
 media_folder: public/img
 public_folder: /img
