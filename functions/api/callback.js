@@ -45,42 +45,60 @@ export async function onRequestGet(context) {
           const token = "${token}";
           const provider = "${provider}";
           
-          // Send the message expected by Decap CMS
-          // Common formats:
-          // 1. String: "authorization:github:success:TOKEN"
-          // 2. Object: { token: TOKEN, provider: "github" } (some versions)
-          
           function notify() {
-             if (!window.opener) {
-               console.error("No window.opener found");
+             const opener = window.opener || window.parent;
+             if (!opener) {
+               console.error("No opener found");
+               const statusEl = document.getElementById("status");
+               if (statusEl) {
+                 statusEl.innerHTML = "Error: No opener window found. Please don't close the main CMS window.";
+                 statusEl.style.color = "red";
+               }
                return;
              }
              
-             // Format 1: Simple string (Common)
-             window.opener.postMessage("authorization:" + provider + ":success:" + token, "*");
+             try {
+               opener.console.log("[CMS-Auth] Sending token from popup...");
+             } catch (e) {
+               console.warn("Could not access opener console (cross-origin limitation)");
+             }
              
-             // Format 2: JSON stringified object (Modern/Specific versions)
-             const jsonMessage = "authorization:" + provider + ":success:" + JSON.stringify({
+             const messageObject = {
                token: token,
                provider: provider
+             };
+             
+             const formats = [
+               "authorization:" + provider + ":success:" + token,
+               "authorization:" + provider + ":success:" + JSON.stringify(messageObject),
+               "authorizer:" + provider + ":success:" + token
+             ];
+             
+             formats.forEach(msg => {
+               opener.postMessage(msg, "*");
              });
-             window.opener.postMessage(jsonMessage, "*");
+
+             opener.postMessage(messageObject, "*");
           }
 
-          // Send immediately
-          notify();
+          window.onload = function() {
+            document.getElementById("status").innerHTML = "Sending credentials to CMS...";
+            notify();
+            const interval = setInterval(notify, 500);
 
-          // Send continuously for a short duration to ensure receipt
-          const interval = setInterval(notify, 500);
-
-          // Close after 2 seconds
-          setTimeout(() => {
-            clearInterval(interval);
-            window.close();
-          }, 2000);
+            setTimeout(() => {
+              clearInterval(interval);
+              document.getElementById("status").innerHTML = "Finished. You can close this window.";
+              setTimeout(() => { window.close() }, 2000);
+            }, 4000);
+          };
         })()
       </script>
-      <p>Authentication successful. You can close this window if it doesn't close automatically.</p>
+      <div style="font-family: sans-serif; padding: 20px; text-align: center;">
+        <h2>Authentication Result</h2>
+        <p id="status">Processing...</p>
+        <p style="font-size: 12px; color: #666;">Current Origin: <script>document.write(window.location.origin)</script></p>
+      </div>
       </body></html>
     `;
 
