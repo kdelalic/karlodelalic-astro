@@ -3,7 +3,7 @@ import { getCollection } from "astro:content"
 import { Image } from "astro:assets"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import Header from "../components/Header.astro"
-import { FaGithub, FaPencilAlt } from "react-icons/fa"
+import { Icon } from "astro-icon/components"
 import profileImage from "../assets/profile.png"
 import "./_index.scss"
 
@@ -37,7 +37,7 @@ const keywords = [
   <h3 class="description">I like to make cool things.</h3>
   <div class="social-buttons">
     <a class="link-button ghost" href="/blog">
-      <FaPencilAlt /> Writings
+      <Icon name="fa6-solid:pencil" /> Writings
     </a>
     <a
       class="link-button ghost"
@@ -45,7 +45,7 @@ const keywords = [
       target="_blank"
       rel="nofollow noopener noreferrer"
     >
-      <FaGithub /> Github
+      <Icon name="fa6-brands:github" /> Github
     </a>
   </div>
   {

@@ -1,0 +1,29 @@
+---
+// Native ScrollToTop component with astro-icon
+import { Icon } from "astro-icon/components"
+---
+
+<button class="scroll-to-top" id="scroll-to-top" aria-label="Scroll to top">
+  <Icon name="fa6-solid:chevron-up" />
+</button>
+
+<script>
+  const scrollBtn = document.getElementById("scroll-to-top")
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 400) {
+      scrollBtn?.classList.add("visible")
+    } else {
+      scrollBtn?.classList.remove("visible")
+    }
+  }
+
+  window.addEventListener("scroll", toggleVisibility)
+
+  scrollBtn?.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  })
+</script>

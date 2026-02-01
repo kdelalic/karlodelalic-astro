@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro"
 import Header from "../components/Header.astro"
-import { FaRegFilePdf, FaLinkedinIn, FaGithub } from "react-icons/fa"
+import { Icon } from "astro-icon/components"
 import "./_contact.scss"
 
 const keywords = [
@@ -33,7 +33,7 @@ const keywords = [
         target="_blank"
         rel="nofollow noopener noreferrer"
       >
-        <FaLinkedinIn /> Linkedin
+        <Icon name="fa6-brands:linkedin-in" /> Linkedin
       </a>
       <a
         class="link-button ghost"
@@ -41,7 +41,7 @@ const keywords = [
         target="_blank"
         rel="nofollow noopener noreferrer"
       >
-        <FaGithub /> Github
+        <Icon name="fa6-brands:github" /> Github
       </a>
     </div>
     <a
@@ -50,7 +50,7 @@ const keywords = [
       target="_blank"
       rel="nofollow noopener noreferrer"
     >
-      <FaRegFilePdf />
+      <Icon name="fa6-regular:file-pdf" />
       Resume
     </a>
   </div>

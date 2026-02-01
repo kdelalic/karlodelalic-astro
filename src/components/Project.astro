@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets"
-import { FaGithub } from "react-icons/fa"
+import { Icon } from "astro-icon/components"
 import "./project.scss"
 
 interface Props {
@@ -47,7 +47,7 @@ const {
       <div class="project__body__tech-logos">
         {
           technologies?.map((technology) => (
-            <div key={technology} class="project__body__tech-logos__logo">
+            <div class="project__body__tech-logos__logo">
               <span class="tooltip">{technology}</span>
               <Image
                 src={techLogos[technology.toLowerCase()]}
@@ -70,7 +70,7 @@ const {
               target="_blank"
               rel="nofollow noopener noreferrer"
             >
-              <FaGithub />
+              <Icon name="fa6-brands:github" />
               Source
             </a>
           )

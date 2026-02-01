@@ -1,7 +1,7 @@
 ---
 import Chip from "./Chip.astro"
 import { Image } from "astro:assets"
-import { FaRegStickyNote } from "react-icons/fa"
+import { Icon } from "astro-icon/components"
 import "./recipe.scss"
 
 interface Props {
@@ -46,7 +46,7 @@ const tagFiltersSet = new Set(tagFilters)
           role="button"
           tabindex="0"
         >
-          <FaRegStickyNote />
+          <Icon name="fa6-regular:note-sticky" />
         </span>
       )
     }

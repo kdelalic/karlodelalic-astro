@@ -1,0 +1,2 @@
+- Never use inline styles, always use CSS classes
+- For NEW icons, use astro-icon with Iconify (e.g., `<Icon name="fa6-brands:github" />`)
