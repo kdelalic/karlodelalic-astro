@@ -1,38 +1,16 @@
 ---
+import SunIcon from "./icons/SunIcon.astro"
+import MoonIcon from "./icons/MoonIcon.astro"
 ---
-<button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+
+<button
+  id="dark-mode-toggle"
+  class="dark-mode-toggle"
+  aria-label="Toggle dark mode"
+>
   <div class="icon-container">
-    <svg
-      class="icon sun-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#FDB813"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <circle cx="12" cy="12" r="5" fill="#FDB813" />
-      <line x1="12" y1="1" x2="12" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="23" />
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-      <line x1="1" y1="12" x2="3" y2="12" />
-      <line x1="21" y1="12" x2="23" y2="12" />
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-    <svg
-      class="icon moon-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#94A3B8"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      style="transform: scaleX(-1);"
-    >
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#94A3B8" />
-    </svg>
+    <SunIcon class="icon sun-icon" />
+    <MoonIcon class="icon moon-icon" />
   </div>
 </button>
 
@@ -71,7 +49,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      opacity 0.3s ease,
+      transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Default state (Light Mode) */
@@ -95,25 +75,25 @@
   }
 
   :global(.dark) .dark-mode-toggle:hover {
-     background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   :global(.dark) .icon-container {
     transform: rotate(180deg);
   }
 </style>
 
 <script>
-  const button = document.getElementById('dark-mode-toggle');
+  const button = document.getElementById("dark-mode-toggle")
 
   if (button) {
-    button.addEventListener('click', () => {
+    button.addEventListener("click", () => {
       // @ts-ignore
-      const currentTheme = window.__theme;
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
+      const currentTheme = window.__theme
+      const newTheme = currentTheme === "dark" ? "light" : "dark"
+
       // @ts-ignore
-      window.__setPreferredTheme(newTheme);
-    });
+      window.__setPreferredTheme(newTheme)
+    })
   }
 </script>
