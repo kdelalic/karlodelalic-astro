@@ -46,7 +46,7 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
   </div>
   <div class="recipes" id="recipes-list">
     {
-      combinedRecipes.map((recipe) => (
+      combinedRecipes.map((recipe, index) => (
         <div
           class="recipe-wrapper"
           data-recipe-id={recipe.id}
@@ -62,6 +62,7 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
             type={recipe.type}
             slug={recipe.slug}
             tagFilters={[]}
+            isAboveFold={index < 2}
           />
         </div>
       ))
