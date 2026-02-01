@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets"
-import DarkModeSwitch from "./DarkModeSwitch"
+import DarkModeSwitch from "./DarkModeSwitch.astro"
 import logo from "../assets/logo.svg"
 import "./header.scss"
 
@@ -48,7 +48,7 @@ const themeCookie = Astro.cookies.get('theme')?.value;
     }
   </nav>
   <div class="dark-mode-switch-wrapper">
-    <DarkModeSwitch client:load />
+    <DarkModeSwitch />
   </div>
 </header>
 
