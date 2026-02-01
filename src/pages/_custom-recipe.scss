@@ -15,6 +15,14 @@
       color: white;
     }
 
+    .recipe-hero-image {
+      width: 100%;
+      height: auto;
+      border-radius: $border-radius;
+      margin-bottom: 2rem;
+      object-fit: cover;
+    }
+
     p {
       font-size: 1rem;
       color: rgba(0, 0, 0, 0.7);
