@@ -34,7 +34,7 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
 
 <div id="recipes-container">
   <div class="searchContainer">
-    <SearchBar client:load />
+    <SearchBar client:idle />
   </div>
   <div class="chips" id="tag-chips">
     {
