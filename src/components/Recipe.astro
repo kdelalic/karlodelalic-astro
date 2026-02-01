@@ -13,7 +13,6 @@ interface Props {
   notes?: string
   type?: string
   slug?: string
-  isAboveFold?: boolean
 }
 
 const {
@@ -25,7 +24,6 @@ const {
   notes,
   type,
   slug,
-  isAboveFold = false,
 } = Astro.props
 
 const capitalizeTitle = (title = "") =>
@@ -65,7 +63,7 @@ const tagFiltersSet = new Set(tagFilters)
               width={600}
               height={400}
               format="webp"
-              loading={isAboveFold ? "eager" : "lazy"}
+              loading="lazy"
             />
           </a>
         ) : (
@@ -82,7 +80,7 @@ const tagFiltersSet = new Set(tagFilters)
               width={600}
               height={400}
               format="webp"
-              loading={isAboveFold ? "eager" : "lazy"}
+              loading="lazy"
             />
           </a>
         ))

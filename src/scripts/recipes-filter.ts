@@ -1,3 +1,27 @@
+// Shuffle recipe cards on page load for per-visitor randomization
+const recipesList = document.getElementById('recipes-list');
+if (recipesList) {
+    const wrappers = Array.from(recipesList.querySelectorAll('.recipe-wrapper'));
+
+    // Fisher-Yates shuffle
+    for (let i = wrappers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [wrappers[i], wrappers[j]] = [wrappers[j], wrappers[i]];
+    }
+
+    // Re-append in shuffled order
+    wrappers.forEach(wrapper => recipesList.appendChild(wrapper));
+
+    // Set fetchpriority="high" and loading="eager" for first 2 images (LCP optimization)
+    wrappers.slice(0, 2).forEach(wrapper => {
+        const img = wrapper.querySelector('img');
+        if (img) {
+            img.setAttribute('fetchpriority', 'high');
+            img.setAttribute('loading', 'eager');
+        }
+    });
+}
+
 // Intersection Observer for lazy loading
 const observerOptions = {
     root: null,

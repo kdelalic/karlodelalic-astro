@@ -20,16 +20,7 @@ const normalizeRecipe = (recipe: any) => ({
 
 const combinedRecipes = recipes.map(normalizeRecipe)
 
-// Shuffle
-for (let i = combinedRecipes.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1))
-  ;[combinedRecipes[i], combinedRecipes[j]] = [
-    combinedRecipes[j],
-    combinedRecipes[i],
-  ]
-}
-
-// Get all unique tags
+// Get all unique tags (shuffle happens client-side for per-visitor randomization)
 const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
 ---
 
@@ -46,7 +37,7 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
   </div>
   <div class="recipes" id="recipes-list">
     {
-      combinedRecipes.map((recipe, index) => (
+      combinedRecipes.map((recipe) => (
         <div
           class="recipe-wrapper"
           data-recipe-id={recipe.id}
@@ -62,7 +53,6 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
             type={recipe.type}
             slug={recipe.slug}
             tagFilters={[]}
-            isAboveFold={index < 2}
           />
         </div>
       ))
