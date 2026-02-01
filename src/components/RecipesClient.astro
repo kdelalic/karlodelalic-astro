@@ -2,6 +2,7 @@
 import Recipe from "./Recipe.astro"
 import Chip from "./Chip.astro"
 import SearchBar from "./SearchBar"
+import ScrollToTop from "./ScrollToTop"
 import "../pages/_recipes.scss"
 
 interface Props {
@@ -67,6 +68,8 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
     }
   </div>
 </div>
+
+<ScrollToTop client:idle />
 
 <script>
   import "../scripts/recipes-filter.ts"

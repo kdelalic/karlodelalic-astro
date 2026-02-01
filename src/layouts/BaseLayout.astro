@@ -1,31 +1,41 @@
 ---
-import '../globals/_base.scss';
-import '../components/layout.scss';
-import { getImage } from "astro:assets";
-import icon from "../assets/icon.png";
+import "../globals/_base.scss"
+import "../components/layout.scss"
+import { getImage } from "astro:assets"
+import icon from "../assets/icon.png"
 
 interface Props {
-  title?: string;
-  description?: string;
-  keywords?: string[];
-  centered?: boolean;
-  date?: string;
-  hidePageTitle?: boolean;
+  title?: string
+  description?: string
+  keywords?: string[]
+  centered?: boolean
+  date?: string
+  hidePageTitle?: boolean
 }
 
 const {
-  title = 'Karlo Delalic',
-  description = 'Karlo Delalic is a software engineer who is experienced with building highly reliable and performant distributed systems.',
-  keywords = ['karlo delalic', 'portfolio', 'distributed systems', 'software engineer'],
+  title = "Karlo Delalic",
+  description = "Karlo Delalic is a software engineer who is experienced with building highly reliable and performant distributed systems.",
+  keywords = [
+    "karlo delalic",
+    "portfolio",
+    "distributed systems",
+    "software engineer",
+  ],
   centered = false,
   date,
   hidePageTitle = false,
-} = Astro.props;
+} = Astro.props
 
-const siteUrl = 'https://karlodelalic.me';
-const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const siteUrl = "https://karlodelalic.me"
+const canonicalURL = new URL(Astro.url.pathname, siteUrl)
 
-const optimizedIcon = await getImage({ src: icon, width: 32, height: 32, format: 'png' });
+const optimizedIcon = await getImage({
+  src: icon,
+  width: 32,
+  height: 32,
+  format: "png",
+})
 ---
 
 <!doctype html>
@@ -38,7 +48,7 @@ const optimizedIcon = await getImage({ src: icon, width: 32, height: 32, format:
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content={keywords.join(', ')} />
+    <meta name="keywords" content={keywords.join(", ")} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -46,36 +56,38 @@ const optimizedIcon = await getImage({ src: icon, width: 32, height: 32, format:
     <meta property="og:url" content={canonicalURL} />
 
     <script is:inline>
-      (function() {
+      ;(function () {
         function setTheme(theme) {
-          if (theme === 'dark') {
-            document.documentElement.className = 'dark';
+          if (theme === "dark") {
+            document.documentElement.className = "dark"
           } else {
-            document.documentElement.className = '';
+            document.documentElement.className = ""
           }
-          window.__theme = theme;
+          window.__theme = theme
         }
 
-        window.__setPreferredTheme = function(theme) {
-          setTheme(theme);
+        window.__setPreferredTheme = function (theme) {
+          setTheme(theme)
           try {
-            localStorage.setItem('preferred-theme', theme);
+            localStorage.setItem("preferred-theme", theme)
           } catch (e) {}
-        };
+        }
 
-        let preferredTheme;
+        let preferredTheme
         try {
-          preferredTheme = localStorage.getItem('preferred-theme');
+          preferredTheme = localStorage.getItem("preferred-theme")
         } catch (e) {}
 
-        const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
-      })();
+        const darkQuery = window.matchMedia("(prefers-color-scheme: dark)")
+        setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"))
+      })()
     </script>
 
     <style is:global>
       html {
-        font-family: 'Avenir Next', 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sans-serif;
+        font-family:
+          "Avenir Next", "Helvetica Neue", "Segoe UI", Helvetica, Arial,
+          sans-serif;
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%;
       }
@@ -89,19 +101,27 @@ const optimizedIcon = await getImage({ src: icon, width: 32, height: 32, format:
         padding: 0;
       }
 
-      h1, h2, h3, h4, h5, h6 {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         font-weight: 600;
-        font-family: 'Avenir Next', 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sans-serif;
+        font-family:
+          "Avenir Next", "Helvetica Neue", "Segoe UI", Helvetica, Arial,
+          sans-serif;
       }
 
-      strong, b {
+      strong,
+      b {
         font-weight: 700;
       }
     </style>
   </head>
   <body>
     <slot name="header" />
-    <div class={centered ? 'content centered' : 'content'}>
+    <div class={centered ? "content centered" : "content"}>
       {!hidePageTitle && title && <h1 class="title">{title}</h1>}
       {date && <p class="date">{date}</p>}
       <main>
