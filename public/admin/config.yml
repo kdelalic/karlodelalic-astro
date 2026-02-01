@@ -3,7 +3,7 @@ backend:
   repo: kdelalic/karlodelalic.me
   branch: main
   base_url: https://karlodelalic.me
-  auth_endpoint: api/auth
+  auth_endpoint: /api/auth
 
 media_folder: public/img
 public_folder: /img
@@ -41,4 +41,4 @@ collections:
       - { label: "Body (Steps)", name: "body", widget: "markdown" }
       - { label: "Notes", name: "notes", widget: "markdown", required: false }
       - { label: 'Type', name: 'type', widget: 'hidden', default: 'custom-recipe' }
-local_backend: true
+# local_backend: true
