@@ -15,5 +15,5 @@ tags:
   - crypto-currency
   - news
   - personal project
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---

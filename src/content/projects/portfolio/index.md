@@ -12,5 +12,5 @@ tags:
   - static site
   - blazing fast
   - developer website
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---

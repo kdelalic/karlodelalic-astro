@@ -13,5 +13,5 @@ tags:
   - slide
   - OCR
   - personal project
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---

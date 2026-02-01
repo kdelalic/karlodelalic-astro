@@ -72,4 +72,4 @@ yarn-error.log
 .yarn-integrity
 
 # Resume
-static/resume.pdf
+public/resume.pdf

@@ -13,5 +13,5 @@ technologies:
 tags:
   - capstone
   - group
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---

@@ -15,5 +15,5 @@ tags:
   - investing
   - crypto-currency
   - portfolio tracker
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---

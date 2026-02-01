@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: kdelalic/karlodelalic.me
+  repo: kdelalic/karlodelalic-astro
   branch: main
   base_url: https://karlodelalic.me
   auth_endpoint: /api/auth
@@ -41,4 +41,4 @@ collections:
       - { label: "Body (Steps)", name: "body", widget: "markdown" }
       - { label: "Notes", name: "notes", widget: "markdown", required: false }
       - { label: 'Type', name: 'type', widget: 'hidden', default: 'custom-recipe' }
-# local_backend: true
+local_backend: true

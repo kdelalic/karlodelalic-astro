@@ -14,5 +14,5 @@ tags:
   - react
   - express
   - yelp
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---

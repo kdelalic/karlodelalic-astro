@@ -12,5 +12,5 @@ tags:
   - github-actions
   - automation
   - resume
-projectLogo: "logo.svg"
+projectLogo: "./logo.svg"
 ---
