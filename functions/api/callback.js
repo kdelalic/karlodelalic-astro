@@ -38,77 +38,73 @@ export async function onRequestGet(context) {
     const token = result.access_token;
     const provider = 'github';
 
+    // The handshake protocol from Decap CMS netlify-auth.js:
+    // 1. Popup sends "authorizing:github" to opener
+    // 2. Opener replies with "authorizing:github" back to popup
+    // 3. Popup then sends "authorization:github:success:{JSON with token}"
     const html = `
       <!doctype html>
-      <html><body><script>
+      <html><body>
+      <div style="font-family: sans-serif; padding: 20px; text-align: center; max-width: 400px; margin: 50px auto; border: 1px solid #eee; border-radius: 8px;">
+        <h2 style="color: #2c3e50;">Authentication</h2>
+        <p id="status" style="font-size: 14px; color: #34495e;">Initiating handshake...</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="font-size: 11px; color: #95a5a6;">Origin: <script>document.write(window.location.origin)</script></p>
+      </div>
+      <script>
         (function() {
           const token = "${token}";
           const provider = "${provider}";
+          const baseUrl = "https://karlodelalic.me";
           
-          function notify() {
-             const opener = window.opener || window.parent;
-             if (!opener) {
-               console.error("No opener found");
-               const statusEl = document.getElementById("status");
-               if (statusEl) {
-                 statusEl.innerHTML = "Error: No opener window found. Please don't close the main CMS window.";
-                 statusEl.style.color = "red";
-               }
-               return;
-             }
-             
-             try {
-               opener.console.log("[CMS-Auth] Sending signals to CMS...");
-             } catch (e) {
-               console.warn("Could not access opener console (cross-origin limitation)");
-             }
-             
-             // Create various response structures
-             const authResponse = {
-               token: token,
-               access_token: token,
-               provider: provider
-             };
-             const authResponseJSON = JSON.stringify(authResponse);
-             
-             // Try every known format for Decap CMS / Netlify CMS
-             const formats = [
-               "authorization:" + provider + ":success:" + token,
-               "authorization:" + provider + ":success:" + authResponseJSON,
-               "authorizer:" + provider + ":success:" + token,
-               "authorizer:" + provider + ":success:" + authResponseJSON,
-               // Also try without 'authorization:' prefix just in case for some custom implementations
-               authResponseJSON
-             ];
-             
-             formats.forEach(msg => {
-               opener.postMessage(msg, "*");
-             });
-
-             // Also try this specific format for some versions of Decap CMS/Netlify CMS
-             opener.postMessage("authorization:github:success", "*");
+          function updateStatus(msg) {
+            document.getElementById("status").innerHTML = msg;
           }
-
-          window.onload = function() {
-            document.getElementById("status").innerHTML = "Sending credentials to CMS...";
-            notify();
-            // Continuously notify for 10 seconds or until window is closed
-            const interval = setInterval(notify, 500);
+          
+          const opener = window.opener;
+          if (!opener) {
+            updateStatus("Error: No opener window found.");
+            return;
+          }
+          
+          // Step 1: Send the handshake initiation
+          updateStatus("Sending handshake...");
+          opener.postMessage("authorizing:" + provider, baseUrl);
+          
+          // Listen for the handshake reply and then send the token
+          window.addEventListener("message", function(e) {
+            console.log("Popup received message:", e.data, "from", e.origin);
             
-            // Note: We won't auto-close the window yet to allow for debugging visibility
-            setTimeout(() => {
-               document.getElementById("status").innerHTML = "Handshake sequence complete. If not logged in, please check CMS console errors.";
-            }, 5000);
-          };
-        })()
+            // Step 2: When we receive the handshake acknowledgment, send the token
+            if (e.data === "authorizing:" + provider) {
+              updateStatus("Handshake received, sending token...");
+              
+              // Step 3: Send the success message with the token as JSON
+              const successData = JSON.stringify({ token: token, provider: provider });
+              const successMsg = "authorization:" + provider + ":success:" + successData;
+              
+              opener.postMessage(successMsg, e.origin);
+              
+              updateStatus("Token sent! Closing...");
+              setTimeout(function() { window.close(); }, 1000);
+            }
+          }, false);
+          
+          // Fallback: If no handshake reply after 3 seconds, try sending directly
+          setTimeout(function() {
+            updateStatus("No handshake reply. Trying direct send...");
+            
+            const successData = JSON.stringify({ token: token, provider: provider });
+            const successMsg = "authorization:" + provider + ":success:" + successData;
+            
+            // Try sending to all origins as fallback
+            opener.postMessage(successMsg, "*");
+            
+            updateStatus("Direct send complete. Closing...");
+            setTimeout(function() { window.close(); }, 2000);
+          }, 3000);
+        })();
       </script>
-      <div style="font-family: sans-serif; padding: 20px; text-align: center; max-width: 400px; margin: auto; border: 1px solid #eee; border-radius: 8px; margin-top: 50px;">
-        <h2 style="color: #2c3e50;">Authentication</h2>
-        <p id="status" style="font-size: 14px; color: #34495e;">Initializing...</p>
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        <p style="font-size: 11px; color: #95a5a6;">Origin: <script>document.write(window.location.origin)</script></p>
-        <button onclick="window.close()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Close Window</button>
-      </div>
       </body></html>
     `;
 
