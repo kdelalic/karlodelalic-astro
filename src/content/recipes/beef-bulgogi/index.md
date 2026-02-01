@@ -1,12 +1,12 @@
 ---
 title: Beef Bulgogi
-type: recipe
+source: https://www.maangchi.com/recipe/bulgogi
 tags:
-  - korean
+  - Korean
   - beef
   - maangchi
   - asian
   - Easy
-source: https://www.maangchi.com/recipe/bulgogi
 image: image.jpg
+type: recipe
 ---
