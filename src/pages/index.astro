@@ -4,6 +4,7 @@ import { Image } from "astro:assets"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import Header from "../components/Header.astro"
 import { FaGithub, FaPencilAlt } from "react-icons/fa"
+import profileImage from "../assets/profile.png"
 import "./_index.scss"
 
 const blogPosts = await getCollection("blog")
@@ -26,10 +27,9 @@ const keywords = [
   <Header slot="header" />
   <Image
     class="profile-image"
-    src="/profile.png"
+    src={profileImage}
     alt="Karlo Delalic's profile"
     width={200}
-    height={200}
     loading="eager"
   />
   <h1 class="fullname">Karlo Delalic</h1>
