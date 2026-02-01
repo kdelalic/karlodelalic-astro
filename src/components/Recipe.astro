@@ -103,39 +103,3 @@ const tagFiltersSet = new Set(tagFilters)
     </div>
   </div>
 </div>
-
-<style>
-  .recipe__note-icon {
-    position: relative;
-    cursor: pointer;
-    margin-left: 0px;
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    transform: translateY(-5px);
-  }
-
-  .recipe__note-icon::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(97, 97, 97, 0.92);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    white-space: normal;
-    width: 250px;
-    font-size: 0.875rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    z-index: 1000;
-  }
-
-  .recipe__note-icon:hover::after,
-  .recipe__note-icon:focus::after {
-    opacity: 1;
-  }
-</style>

@@ -86,6 +86,73 @@ header {
     min-height: 38px;
   }
 
+  .dark-mode-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: rgba(103, 114, 229, 0.1);
+      transform: scale(1.1);
+    }
+
+    .#{$dark-class} & {
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .icon-container {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+      .#{$dark-class} & {
+        transform: rotate(180deg);
+      }
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sun-icon {
+      opacity: 1;
+      transform: rotate(0deg);
+
+      .#{$dark-class} & {
+        opacity: 0;
+        transform: rotate(-90deg);
+      }
+    }
+
+    .moon-icon {
+      opacity: 0;
+      transform: rotate(90deg);
+
+      .#{$dark-class} & {
+        opacity: 1;
+        transform: rotate(0deg);
+      }
+    }
+  }
+
   @media all and (max-width: ($width-max - 1px)) {
     max-width: 100%;
     width: 100%;

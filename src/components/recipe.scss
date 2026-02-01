@@ -44,11 +44,37 @@
   }
 
   &__note-icon {
-    // Just basic icon alignment
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 8px;
+    position: relative;
     cursor: pointer;
+    margin-left: 0px; // from inline style override
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    transform: translateY(-5px); // from inline style
+
+    &::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(97, 97, 97, 0.92);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      white-space: normal;
+      width: 250px;
+      font-size: 0.875rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 1000;
+    }
+
+    &:hover::after,
+    &:focus::after {
+      opacity: 1;
+    }
   }
 
   &__body {

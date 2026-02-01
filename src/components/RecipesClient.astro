@@ -69,21 +69,6 @@ const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
   </div>
 </div>
 
-<style>
-  .recipe-wrapper {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.3s ease-out,
-      transform 0.3s ease-out;
-  }
-
-  .recipe-wrapper.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
-
 <script>
   import "../scripts/recipes-filter.ts"
 </script>
