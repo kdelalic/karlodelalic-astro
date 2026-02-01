@@ -42,41 +42,39 @@ export async function onRequestGet(context) {
       <!doctype html>
       <html><body><script>
         (function() {
-          function receiveMessage(e) {
-            console.log("receiveMessage %o", e);
-            
-            // Match the window.open call in Decap CMS
-            // https://github.com/decaporg/decap-cms/blob/e939551/packages/decap-cms-lib-auth/src/netlify-auth.js#L46
-            
-            // Decap CMS expects a message with 'authorizer: "github"' (config.yml backend.name)
-            // But usually we just postMessage to opener.
-            
-            window.opener.postMessage(
-              'authorization:${provider}:success:${token}',
-              e.origin
-            );
+          const token = "${token}";
+          const provider = "${provider}";
+          
+          // Send the message expected by Decap CMS
+          // Common formats:
+          // 1. String: "authorization:github:success:TOKEN"
+          // 2. Object: { token: TOKEN, provider: "github" } (some versions)
+          
+          function notify() {
+             const key = "authorization:" + provider + ":success:" + token;
+             
+             // Send to all origins since we might be developing on localhost
+             // but the auth callback runs on the production domain.
+             if (window.opener) {
+               window.opener.postMessage(key, "*");
+             }
           }
 
-          window.addEventListener("message", receiveMessage, false);
-          
-          // Send message to opener immediately in case they are already listening
-          // The CMS polls or listens. The standard for custom backends often involves 
-          // a specific handshake, but for 'github' backend with 'base_url', it expects
-          // specific behavior. 
-          
-          // Let's try the standard postMessage format for Decap CMS with external OAuth:
-          window.opener.postMessage({
-            token: "${token}",
-            provider: "${provider}"
-          }, "*");
+          // Send immediately
+          notify();
 
-          // Also try the legacy string format just in case
-          window.opener.postMessage("authorization:github:success:${token}", "*");
+          // Send continuously for a short duration to ensure receipt
+          const interval = setInterval(notify, 500);
 
-          document.write("Login successful! You can close this window.");
-          setTimeout(() => { window.close() }, 1000);
+          // Close after 2 seconds
+          setTimeout(() => {
+            clearInterval(interval);
+            window.close();
+          }, 2000);
         })()
-      </script></body></html>
+      </script>
+      <p>Authentication successful. You can close this window if it doesn't close automatically.</p>
+      </body></html>
     `;
 
     return new Response(html, {
