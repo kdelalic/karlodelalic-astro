@@ -11,6 +11,9 @@ export default defineConfig({
     mdx(),
     sitemap(),
   ],
+  build: {
+    inlineStylesheets: 'always',
+  },
   markdown: {
     shikiConfig: {
       theme: 'github-dark',
