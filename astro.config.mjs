@@ -14,6 +14,7 @@ export default defineConfig({
   trailingSlash: 'never',
   build: {
     inlineStylesheets: 'always',
+    format: 'file',
   },
   markdown: {
     shikiConfig: {

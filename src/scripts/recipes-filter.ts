@@ -9,11 +9,13 @@ if (recipesList) {
         [wrappers[i], wrappers[j]] = [wrappers[j], wrappers[i]];
     }
 
-    // Re-append in shuffled order
-    wrappers.forEach(wrapper => recipesList.appendChild(wrapper));
+    // Re-append in shuffled order using DocumentFragment to minimize reflows
+    const fragment = document.createDocumentFragment();
+    wrappers.forEach(wrapper => fragment.appendChild(wrapper));
+    recipesList.appendChild(fragment);
 
-    // Set fetchpriority="high" and loading="eager" for first 2 images (LCP optimization)
-    wrappers.slice(0, 2).forEach(wrapper => {
+    // Set fetchpriority="high" and loading="eager" for first image (LCP optimization)
+    wrappers.slice(0, 1).forEach(wrapper => {
         const img = wrapper.querySelector('img');
         if (img) {
             img.setAttribute('fetchpriority', 'high');

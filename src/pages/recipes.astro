@@ -1,10 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import RecipesClient from '../components/RecipesClient.astro';
+import { getCollection } from "astro:content"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import Header from "../components/Header.astro"
+import RecipesClient from "../components/RecipesClient.astro"
 
-const allRecipes = await getCollection('recipes');
+const allRecipes = await getCollection("recipes")
 
 // Prepare recipes data
 const recipesData = allRecipes.map((recipe) => {
@@ -15,12 +15,20 @@ const recipesData = allRecipes.map((recipe) => {
     source: recipe.data.source,
     notes: recipe.data.notes,
     type: recipe.data.type,
-    slug: recipe.slug.includes('custom-recipes') ? `/custom-recipes/${recipe.slug.split('/')[1]}` : null,
+    slug: recipe.slug.includes("custom-recipes")
+      ? `/custom-recipes/${recipe.slug.split("/")[1]}`
+      : null,
     image: recipe.data.image,
-  };
-});
+  }
+})
 
-const keywords = ['karlo delalic', 'portfolio', 'distributed systems', 'software engineer', 'recipes'];
+const keywords = [
+  "karlo delalic",
+  "portfolio",
+  "distributed systems",
+  "software engineer",
+  "recipes",
+]
 ---
 
 <BaseLayout title="Recipes" keywords={keywords}>
