@@ -10,6 +10,8 @@
         "@iconify-json/fa6-brands": "^1.2.6",
         "@iconify-json/fa6-regular": "^1.2.4",
         "@iconify-json/fa6-solid": "^1.2.4",
+        "@iconify-json/mynaui": "^1.2.17",
+        "@iconify-json/twemoji": "^1.2.5",
         "astro": "^5.17.1",
         "astro-icon": "^1.1.5",
         "decap-cms-app": "^3.10.0",
@@ -202,6 +204,10 @@
     "@iconify-json/fa6-regular": ["@iconify-json/fa6-regular@1.2.4", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-fnUS/MLj3ZAp29oRsC8/aY8Wau7NIg7VesTz3jCcE6VJBzcz95Yxp/Dl5yHvkP+aQxrNw5Lj3nrOXB4nQh+oNA=="],
 
     "@iconify-json/fa6-solid": ["@iconify-json/fa6-solid@1.2.4", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-LmDNNdJVyvF5mPm1yxWvL8KjCc/E8LzoqnF1LNTVpyY2ZJRUlGOWuPIThdbuFBF2IovgttkIyumhyqfmlHdwKg=="],
+
+    "@iconify-json/mynaui": ["@iconify-json/mynaui@1.2.17", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-2FU5KinDgppL8SmOimyxTWxKgC6MujmrOXW90z+331mE1UYkGBhdh+dlgKD6b45dHrN6ERzm5hIh4AadNzF4bw=="],
+
+    "@iconify-json/twemoji": ["@iconify-json/twemoji@1.2.5", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-uKpuIEV0v6K5BW3Mjdyl+XKFVAbbcPxAgifKvEMtZoUZB5+YiY5zaMm2uNNCxyXzAWU9yNLlj41WU6/mvgALsw=="],
 
     "@iconify/tools": ["@iconify/tools@4.2.0", "", { "dependencies": { "@iconify/types": "^2.0.0", "@iconify/utils": "^2.3.0", "cheerio": "^1.1.2", "domhandler": "^5.0.3", "extract-zip": "^2.0.1", "local-pkg": "^1.1.2", "pathe": "^2.0.3", "svgo": "^3.3.2", "tar": "^7.5.2" } }, "sha512-WRxPva/ipxYkqZd1+CkEAQmd86dQmrwH0vwK89gmp2Kh2WyyVw57XbPng0NehP3x4V1LzLsXUneP1uMfTMZmUA=="],
 

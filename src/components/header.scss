@@ -144,11 +144,11 @@ header {
 
     .moon-icon {
       opacity: 0;
-      transform: rotate(90deg);
 
       .#{$dark-class} & {
         opacity: 1;
-        transform: rotate(0deg);
+        color: #94A3B8;
+        transform: rotate(180deg);
       }
     }
   }

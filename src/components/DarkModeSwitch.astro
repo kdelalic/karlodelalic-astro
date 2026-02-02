@@ -1,6 +1,5 @@
 ---
-import SunIcon from "./icons/SunIcon.astro"
-import MoonIcon from "./icons/MoonIcon.astro"
+import { Icon } from "astro-icon/components"
 ---
 
 <button
@@ -9,8 +8,8 @@ import MoonIcon from "./icons/MoonIcon.astro"
   aria-label="Toggle dark mode"
 >
   <div class="icon-container">
-    <SunIcon class="icon sun-icon" />
-    <MoonIcon class="icon moon-icon" />
+    <Icon name="twemoji:sun" class="icon sun-icon" />
+    <Icon name="mynaui:moon-solid" class="icon moon-icon" />
   </div>
 </button>
 
