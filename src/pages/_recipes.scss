@@ -80,13 +80,13 @@
         color: #666;
         
         .#{$dark-class} & {
-          color: #aaa;
+          color: #fff;
         }
       }
 
       &:focus {
-        border-color: #2ebf91;
-        box-shadow: 0 0 0 2px rgba(46, 191, 145, 0.2);
+        border-color: $secondary-color;
+        box-shadow: 0 0 0 2px rgba(103, 229, 135, 0.2);
       }
 
       &::-webkit-search-cancel-button {

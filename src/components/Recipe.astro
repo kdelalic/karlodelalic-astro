@@ -1,6 +1,6 @@
 ---
 import Chip from "./Chip.astro"
-import { Image } from "astro:assets"
+import { Picture } from "astro:assets"
 import { Icon } from "astro-icon/components"
 import "./recipe.scss"
 
@@ -45,6 +45,7 @@ const tagFiltersSet = new Set(tagFilters)
           data-tooltip={notes}
           role="button"
           tabindex="0"
+          aria-label="Recipe notes"
         >
           <Icon name="fa6-regular:note-sticky" />
         </span>
@@ -56,13 +57,14 @@ const tagFiltersSet = new Set(tagFilters)
       image &&
         (type === "custom-recipe" ? (
           <a href={slug} class="recipe__link">
-            <Image
+            <Picture
               src={image}
               alt={title}
               class="recipe__image"
-              width={600}
-              height={400}
-              format="webp"
+              widths={[300, 450, 600]}
+              sizes="(max-width: 600px) 300px, (max-width: 900px) 450px, 600px"
+              formats={["avif", "webp"]}
+              quality={70}
               loading="lazy"
             />
           </a>
@@ -73,13 +75,14 @@ const tagFiltersSet = new Set(tagFilters)
             rel="nofollow noopener noreferrer"
             class="recipe__link"
           >
-            <Image
+            <Picture
               src={image}
               alt={title}
               class="recipe__image"
-              width={600}
-              height={400}
-              format="webp"
+              widths={[300, 450, 600]}
+              sizes="(max-width: 600px) 300px, (max-width: 900px) 450px, 600px"
+              formats={["avif", "webp"]}
+              quality={70}
               loading="lazy"
             />
           </a>
