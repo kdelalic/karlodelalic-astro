@@ -16,6 +16,11 @@
     transform: translateY(0);
   }
 
+  &:has(.recipe__note-icon:hover),
+  &:has(.recipe__note-icon.active) {
+    z-index: 100;
+  }
+
   &__link {
     overflow: hidden;
     display: block;
@@ -47,7 +52,7 @@
 
   &__note-icon {
     position: relative;
-    z-index: 1;
+    z-index: 1001;
     cursor: pointer;
     margin-left: 0px; // from inline style override
     display: inline-flex;
@@ -74,6 +79,7 @@
       z-index: 1001;
     }
 
+    &.active::after,
     &:hover::after,
     &:focus::after {
       opacity: 1;

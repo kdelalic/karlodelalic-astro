@@ -104,3 +104,22 @@ const tagFiltersSet = new Set(tagFilters)
     </div>
   </div>
 </div>
+
+<script>
+  // Handle recipe note tooltip toggle
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement
+    const noteIcon = target.closest(".recipe__note-icon")
+
+    // Close any other active notes (or all if we clicked outside)
+    document.querySelectorAll(".recipe__note-icon.active").forEach((icon) => {
+      if (icon !== noteIcon) {
+        icon.classList.remove("active")
+      }
+    })
+
+    if (noteIcon) {
+      noteIcon.classList.toggle("active")
+    }
+  })
+</script>

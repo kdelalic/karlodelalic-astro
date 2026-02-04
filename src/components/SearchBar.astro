@@ -7,8 +7,14 @@ import { Icon } from "astro-icon/components"
   <input
     type="search"
     id="recipe-search"
-    placeholder="Search recipes..."
+    placeholder="Search"
     autocomplete="off"
+  />
+  <Icon
+    name="fa6-solid:xmark"
+    id="clear-search"
+    class="clear-icon"
+    aria-label="Clear search"
   />
   <Icon name="fa6-solid:magnifying-glass" class="search-icon" />
 </div>
@@ -17,12 +23,39 @@ import { Icon } from "astro-icon/components"
   const searchInput = document.getElementById(
     "recipe-search"
   ) as HTMLInputElement
+  const clearBtn = document.getElementById("clear-search")
+
+  function updateClearButton() {
+    if (!clearBtn) return
+    if (searchInput?.value) {
+      clearBtn.style.display = "block"
+    } else {
+      clearBtn.style.display = "none"
+    }
+  }
+
+  // Initial check (in case browser restores value)
+  updateClearButton()
 
   searchInput?.addEventListener("input", (event) => {
+    updateClearButton()
     const target = event.target as HTMLInputElement
     const searchEvent = new CustomEvent("recipeSearch", {
       detail: { value: target.value },
     })
     window.dispatchEvent(searchEvent)
+  })
+
+  clearBtn?.addEventListener("click", () => {
+    if (searchInput) {
+      searchInput.value = ""
+      searchInput.focus()
+      updateClearButton()
+      window.dispatchEvent(
+        new CustomEvent("recipeSearch", {
+          detail: { value: "" },
+        })
+      )
+    }
   })
 </script>

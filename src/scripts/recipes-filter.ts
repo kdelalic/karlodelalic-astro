@@ -73,6 +73,19 @@ function updateRecipeDisplay() {
         } else {
             (wrapper as HTMLElement).style.display = 'none';
         }
+
+        // Update active state of chips within the recipe card
+        const recipeChips = wrapper.querySelectorAll('.chip[data-tag]');
+        recipeChips.forEach((chip) => {
+            const tag = chip.getAttribute('data-tag');
+            if (tag) {
+                if (activeFilters.has(tag)) {
+                    chip.classList.add('active');
+                } else {
+                    chip.classList.remove('active');
+                }
+            }
+        });
     });
 
     // Update visible tags based on search results
@@ -112,7 +125,7 @@ window.addEventListener('recipeSearch', (e: Event) => {
 });
 
 // Chip click handlers
-const chips = document.querySelectorAll('.chip[data-tag]');
+const chips = document.querySelectorAll('#tag-chips .chip[data-tag]');
 chips.forEach((chip) => {
     chip.addEventListener('click', () => {
         const tag = chip.getAttribute('data-tag');
