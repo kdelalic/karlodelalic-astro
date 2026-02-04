@@ -53,6 +53,7 @@ const appleTouchIcon = await getImage({
     <link rel="icon" type="image/png" href={optimizedIcon.src} />
     <link rel="apple-touch-icon" href={appleTouchIcon.src} />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="manifest" href="/manifest.json" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -62,6 +63,13 @@ const appleTouchIcon = await getImage({
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
+    <meta name="theme-color" content="#6772e5" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:creator" content="@karlodelalic" />
 
     <script is:inline>
       ;(function () {
