@@ -18,6 +18,9 @@ async function generate() {
     
     await sharp(input).resize(512, 512).toFile(path.join(outDir, 'icon-512.png'));
     console.log('Created icon-512.png');
+
+    await sharp(input).resize(180, 180).toFile('public/apple-touch-icon.png');
+    console.log('Created apple-touch-icon.png');
   } catch (err) {
     console.error('Error generating icons:', err);
     process.exit(1);

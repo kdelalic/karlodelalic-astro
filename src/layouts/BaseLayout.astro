@@ -36,13 +36,6 @@ const optimizedIcon = await getImage({
   height: 32,
   format: "png",
 })
-
-const appleTouchIcon = await getImage({
-  src: icon,
-  width: 180,
-  height: 180,
-  format: "png",
-})
 ---
 
 <!doctype html>
@@ -52,7 +45,7 @@ const appleTouchIcon = await getImage({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href={optimizedIcon.src} />
-    <link rel="apple-touch-icon" href={appleTouchIcon.src} />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="manifest" href="/manifest.json" />
 
