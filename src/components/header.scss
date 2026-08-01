@@ -21,7 +21,18 @@
   display: block;
   flex: 0 0 auto;
   height: 1.5rem;
+  transform-origin: center;
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1.4);
   width: 1.5rem;
+}
+
+.site-header__home:hover .site-logo,
+.site-header__home:focus-visible .site-logo {
+  transform: rotate(-4deg) scale(1.12);
+}
+
+.site-header__home:active .site-logo {
+  transform: rotate(0) scale(0.92);
 }
 
 .site-logo__background {

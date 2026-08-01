@@ -36,6 +36,14 @@
   text-decoration-thickness: 1px;
 }
 
+.recipe__external-icon {
+  display: inline-block;
+  height: 0.68em;
+  margin-left: 0.25em;
+  vertical-align: 0.08em;
+  width: 0.68em;
+}
+
 .recipe__tags {
   display: flex;
   flex-wrap: wrap;

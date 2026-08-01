@@ -12,8 +12,43 @@
 }
 
 .home__section {
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-border);
   padding-block: 1.25rem 1.75rem;
+  position: relative;
+}
+
+.home__section::before,
+.home__section::after {
+  content: "";
+  height: 2px;
+  position: absolute;
+  top: -2px;
+  transition:
+    left 180ms ease-out,
+    width 180ms ease-out;
+}
+
+.home__section::before {
+  background: var(--color-highlight);
+  left: 0;
+  width: 22%;
+}
+
+.home__section::after {
+  background: var(--color-accent);
+  left: 22%;
+  width: 8%;
+}
+
+.home__section:has(a:hover)::before,
+.home__section:focus-within::before {
+  width: 28%;
+}
+
+.home__section:has(a:hover)::after,
+.home__section:focus-within::after {
+  left: 28%;
+  width: 12%;
 }
 
 .home__section h2 {
@@ -52,5 +87,19 @@
   display: inline-block;
   font-size: 1.1rem;
   text-align: center;
+  transform-origin: center;
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1.4);
   width: 1.4rem;
+}
+
+.app-links a:hover .app-links__emoji,
+.app-links a:focus-visible .app-links__emoji,
+.resource-links a:hover .resource-links__emoji,
+.resource-links a:focus-visible .resource-links__emoji {
+  transform: translateY(-0.1rem) rotate(-4deg) scale(1.18);
+}
+
+.app-links a:active .app-links__emoji,
+.resource-links a:active .resource-links__emoji {
+  transform: translateY(0) rotate(0) scale(0.9);
 }

@@ -119,4 +119,9 @@
   .recipes {
     column-count: 1;
   }
+
+  .recipe-wrapper {
+    margin-inline: auto;
+    max-width: 25rem;
+  }
 }

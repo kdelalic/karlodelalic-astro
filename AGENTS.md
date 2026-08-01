@@ -1,3 +1,4 @@
 - Never use inline styles, always use CSS classes
 - For NEW icons, use astro-icon with Iconify (e.g., `<Icon name="fa6-brands:github" />`)
 - Use bun instead of npm
+- All palettes must use the same layout and component styling. Palette-specific code may only affect color presentation, such as color tokens or the native light/dark color scheme; never change spacing, sizing, borders, typography, effects, or structure based on the active palette.

@@ -5,7 +5,12 @@ import "./palette-picker.scss"
 
 <div class="palette-picker">
   <label class="visually-hidden" for="palette-picker">Color palette</label>
-  <select id="palette-picker" data-palette-picker aria-label="Color palette">
+  <select
+    id="palette-picker"
+    class="palette-picker__select"
+    data-palette-picker
+    aria-label="Color palette"
+  >
     {
       palettes.map((palette) => (
         <option value={palette.id}>{palette.emoji}</option>
@@ -49,6 +54,19 @@ import "./palette-picker.scss"
       if (palette) picker.title = palette.name
     }
 
-    picker.addEventListener("change", () => applyPalette(picker.value))
+    const popPicker = () => {
+      picker.classList.remove("palette-picker__select--pop")
+      window.requestAnimationFrame(() =>
+        picker.classList.add("palette-picker__select--pop")
+      )
+    }
+
+    picker.addEventListener("animationend", () =>
+      picker.classList.remove("palette-picker__select--pop")
+    )
+    picker.addEventListener("change", () => {
+      applyPalette(picker.value)
+      popPicker()
+    })
   }
 </script>
