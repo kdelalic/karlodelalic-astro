@@ -26,100 +26,69 @@ const {
   slug,
 } = Astro.props
 
-const capitalizeTitle = (title = "") =>
-  title
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
-
+const destination = type === "custom-recipe" ? slug : source
+const isExternal = type !== "custom-recipe"
 const tagFiltersSet = new Set(tagFilters)
 ---
 
-<div class="recipe fade-in">
+<article class="recipe">
+  {
+    image && destination && (
+      <a
+        href={destination}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "nofollow noopener noreferrer" : undefined}
+        class="recipe__image-link"
+        aria-label={`Open ${title}${isExternal ? " in a new tab" : ""}`}
+      >
+        <Picture
+          src={image}
+          alt={title}
+          class="recipe__image"
+          widths={[300, 450, 600, 800]}
+          sizes="(max-width: 700px) 100vw, (max-width: 1088px) 50vw, 33vw"
+          formats={["avif", "webp"]}
+          quality={70}
+          loading="lazy"
+        />
+      </a>
+    )
+  }
   <h2 class="recipe__title">
-    {capitalizeTitle(title)}
     {
-      notes && notes.trim() !== "" && (
-        <span
-          class="recipe__note-icon"
-          data-tooltip={notes}
-          role="button"
-          tabindex="0"
-          aria-label="Recipe notes"
+      destination ? (
+        <a
+          href={destination}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "nofollow noopener noreferrer" : undefined}
         >
-          <Icon name="fa6-regular:note-sticky" />
-        </span>
+          {title}
+          {isExternal && <span aria-hidden="true"> ↗</span>}
+          {isExternal && <span class="visually-hidden"> (opens in a new tab)</span>}
+        </a>
+      ) : (
+        title
       )
     }
   </h2>
-  <div class="recipe__body">
-    {
-      image &&
-        (type === "custom-recipe" ? (
-          <a href={slug} class="recipe__link">
-            <Picture
-              src={image}
-              alt={title}
-              class="recipe__image"
-              widths={[300, 450, 600, 800]}
-              sizes="(max-width: 768px) 100vw, (max-width: 1088px) 50vw, 33vw"
-              formats={["avif", "webp"]}
-              quality={70}
-              loading="lazy"
-            />
-          </a>
-        ) : (
-          <a
-            href={source}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            class="recipe__link"
-          >
-            <Picture
-              src={image}
-              alt={title}
-              class="recipe__image"
-              widths={[300, 450, 600, 800]}
-              sizes="(max-width: 768px) 100vw, (max-width: 1088px) 50vw, 33vw"
-              formats={["avif", "webp"]}
-              quality={70}
-              loading="lazy"
-            />
-          </a>
-        ))
-    }
-    <div class="recipe__body__chips">
-      {
-        tags &&
-          tags
-            .sort()
-            .map((tag) => (
-              <Chip
-                label={tag}
-                data-tag={tag}
-                active={tagFiltersSet.has(tag)}
-              />
-            ))
-      }
-    </div>
-  </div>
-</div>
-
-<script>
-  // Handle recipe note tooltip toggle
-  document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement
-    const noteIcon = target.closest(".recipe__note-icon")
-
-    // Close any other active notes (or all if we clicked outside)
-    document.querySelectorAll(".recipe__note-icon.active").forEach((icon) => {
-      if (icon !== noteIcon) {
-        icon.classList.remove("active")
-      }
-    })
-
-    if (noteIcon) {
-      noteIcon.classList.toggle("active")
-    }
-  })
-</script>
+  {
+    tags.length > 0 && (
+      <div class="recipe__tags" aria-label={`Tags for ${title}`}>
+        {tags.map((tag) => (
+          <Chip label={tag} data-tag={tag} active={tagFiltersSet.has(tag)} />
+        ))}
+      </div>
+    )
+  }
+  {
+    notes && notes.trim() !== "" && (
+      <details class="recipe__notes">
+        <summary>
+          <Icon name="fa6-regular:note-sticky" aria-hidden="true" />
+          Personal note
+        </summary>
+        <p>{notes}</p>
+      </details>
+    )
+  }
+</article>

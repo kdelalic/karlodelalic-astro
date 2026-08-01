@@ -1,84 +1,37 @@
-@use "../globals/base" as *;
-
 .custom-recipe {
-  article {
-    background-color: white;
-    border-radius: $border-radius;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    color: #333;
-    text-align: left;
+  text-align: left;
+}
 
-    .#{$dark-class} & {
-      background-color: #333;
-      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-      color: white;
-    }
+.custom-recipe article {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: clamp(1rem, 4vw, 2rem);
+}
 
-    .recipe-hero-image {
-      width: 100%;
-      height: auto;
-      border-radius: $border-radius;
-      margin-bottom: 2rem;
-      object-fit: cover;
-    }
+.custom-recipe .recipe-hero-image {
+  height: auto;
+  margin-bottom: 2rem;
+  object-fit: cover;
+  width: 100%;
+}
 
-    p {
-      font-size: 1rem;
-      color: rgba(0, 0, 0, 0.7);
-      margin-bottom: 1.5rem;
+.custom-recipe h2 {
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-ink);
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.5rem;
+}
 
-      .#{$dark-class} & {
-        color: rgba(255, 255, 255, 0.8);
-      }
-    }
+.custom-recipe li,
+.custom-recipe p,
+.custom-recipe .steps,
+.custom-recipe .notes {
+  line-height: 1.7;
+}
 
-    h2 {
-      font-size: 1.75rem;
-      color: $primary-color;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid $divider-shadow;
-
-      .#{$dark-class} & {
-        color: white;
-        border-bottom-color: $divider-shadow-dark;
-      }
-    }
-
-    ul {
-      list-style: disc;
-      margin-bottom: 2rem;
-
-      li {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 0.5rem;
-
-        .#{$dark-class} & {
-          color: white;
-        }
-      }
-    }
-
-    .steps {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-
-      .#{$dark-class} & {
-        color: white;
-      }
-    }
-
-    .notes {
-      font-size: 1.1rem;
-      line-height: 1.6;
-
-      .#{$dark-class} & {
-        color: white;
-      }
-    }
-  }
+.custom-recipe .notes {
+  border-left: 3px solid var(--color-highlight);
+  color: var(--color-muted);
+  padding-left: 0.75rem;
 }

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content"
+import { getCollection, render } from "astro:content"
 import type { CollectionEntry } from "astro:content"
 import { Picture } from "astro:assets"
 import BaseLayout from "../../layouts/BaseLayout.astro"
@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   )
 
   return customRecipes.map((recipe) => ({
-    params: { slug: recipe.slug },
+    params: { slug: recipe.id },
     props: { recipe },
   }))
 }
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const { recipe } = Astro.props
-const { Content } = await recipe.render()
+const { Content } = await render(recipe)
 ---
 
 <BaseLayout title={recipe.data.title}>

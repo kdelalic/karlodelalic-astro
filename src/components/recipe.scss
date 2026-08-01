@@ -1,98 +1,63 @@
-@use "../globals/base" as *;
-
 .recipe {
-  text-align: left;
+  break-inside: avoid;
+  margin-bottom: 2.25rem;
+}
+
+.recipe__image-link {
+  aspect-ratio: 4 / 3;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 0.75rem;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.recipe__image {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease-out;
   width: 100%;
-  display: inline-block;
-  margin-bottom: 40px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+}
 
-  &.fade-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.recipe__image-link:hover .recipe__image,
+.recipe__image-link:focus-visible .recipe__image {
+  transform: scale(1.1);
+}
 
-  &:has(.recipe__note-icon:hover),
-  &:has(.recipe__note-icon.active) {
-    z-index: 100;
-  }
+.recipe__title {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
 
-  &__link {
-    overflow: hidden;
-    display: block;
-    margin-bottom: 10px;
-    max-height: 300px;
-    border-radius: 8px;
-  }
+.recipe__title a {
+  text-decoration-thickness: 1px;
+}
 
-  &__image {
-    transition: all 0.2s ease-out;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    max-height: 300px;
-    display: block;
+.recipe__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
 
-    &:hover {
-      transition: all 0.2s ease-out;
-      transform: scale(1.1);
-    }
-  }
+.recipe__notes {
+  border-left: 3px solid var(--color-highlight);
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  margin-top: 0.75rem;
+  padding-left: 0.65rem;
+}
 
-  &__title {
-    position: relative;
-    z-index: 2;
-    color: $primary-color;
-    margin-bottom: 10px;
-  }
+.recipe__notes summary {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.35rem;
+}
 
-  &__note-icon {
-    position: relative;
-    z-index: 1001;
-    cursor: pointer;
-    margin-left: 0px; // from inline style override
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    transform: translateY(-5px); // from inline style
-
-    &::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(97, 97, 97, 0.92);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      white-space: normal;
-      width: 250px;
-      font-size: 0.875rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-      z-index: 1001;
-    }
-
-    &.active::after,
-    &:hover::after,
-    &:focus::after {
-      opacity: 1;
-      z-index: 1001;
-    }
-  }
-
-  &__body {
-    &__buttons {
-      display: flex;
-      margin-left: -10px;
-      margin-right: -10px;
-      z-index: 1001;
-    }
-  }
+.recipe__notes p {
+  margin: 0.5rem 0 0;
+  white-space: pre-line;
 }

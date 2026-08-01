@@ -1,61 +1,59 @@
 ---
 import { Icon } from "astro-icon/components"
-// Native SearchBar component - no React/MUI dependencies
 ---
 
 <div class="search-bar">
+  <label class="visually-hidden" for="recipe-search">Search recipes</label>
+  <Icon
+    name="fa6-solid:magnifying-glass"
+    class="search-icon"
+    aria-hidden="true"
+  />
   <input
     type="search"
     id="recipe-search"
-    placeholder="Search"
+    placeholder="Search recipes"
     autocomplete="off"
   />
-  <Icon
-    name="fa6-solid:xmark"
+  <button
+    type="button"
     id="clear-search"
-    class="clear-icon"
-    aria-label="Clear search"
-  />
-  <Icon name="fa6-solid:magnifying-glass" class="search-icon" />
+    class="clear-search"
+    aria-label="Clear recipe search"
+    hidden
+  >
+    <Icon name="fa6-solid:xmark" aria-hidden="true" />
+  </button>
 </div>
 
 <script>
-  const searchInput = document.getElementById(
-    "recipe-search"
-  ) as HTMLInputElement
-  const clearBtn = document.getElementById("clear-search")
+  const searchInput = document.querySelector<HTMLInputElement>("#recipe-search")
+  const clearButton = document.querySelector<HTMLButtonElement>("#clear-search")
 
-  function updateClearButton() {
-    if (!clearBtn) return
-    if (searchInput?.value) {
-      clearBtn.style.display = "block"
-    } else {
-      clearBtn.style.display = "none"
-    }
+  const updateClearButton = () => {
+    if (clearButton) clearButton.hidden = !searchInput?.value
   }
 
-  // Initial check (in case browser restores value)
+  const dispatchSearch = () => {
+    window.dispatchEvent(
+      new CustomEvent("recipeSearch", {
+        detail: { value: searchInput?.value ?? "" },
+      })
+    )
+  }
+
   updateClearButton()
 
-  searchInput?.addEventListener("input", (event) => {
+  searchInput?.addEventListener("input", () => {
     updateClearButton()
-    const target = event.target as HTMLInputElement
-    const searchEvent = new CustomEvent("recipeSearch", {
-      detail: { value: target.value },
-    })
-    window.dispatchEvent(searchEvent)
+    dispatchSearch()
   })
 
-  clearBtn?.addEventListener("click", () => {
-    if (searchInput) {
-      searchInput.value = ""
-      searchInput.focus()
-      updateClearButton()
-      window.dispatchEvent(
-        new CustomEvent("recipeSearch", {
-          detail: { value: "" },
-        })
-      )
-    }
+  clearButton?.addEventListener("click", () => {
+    if (!searchInput) return
+    searchInput.value = ""
+    searchInput.focus()
+    updateClearButton()
+    dispatchSearch()
   })
 </script>

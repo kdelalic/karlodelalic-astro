@@ -1,170 +1,79 @@
-// Shuffle recipe cards on page load for per-visitor randomization
-const recipesList = document.getElementById('recipes-list');
-if (recipesList) {
-    const wrappers = Array.from(recipesList.querySelectorAll('.recipe-wrapper'));
+const recipeWrappers = Array.from(
+  document.querySelectorAll<HTMLElement>(".recipe-wrapper")
+)
+const filterChips = Array.from(
+  document.querySelectorAll<HTMLButtonElement>("#tag-chips .chip[data-tag]")
+)
+const recipeCount = document.querySelector<HTMLElement>("#recipe-count")
+const noRecipes = document.querySelector<HTMLElement>("#no-recipes")
 
-    // Fisher-Yates shuffle
-    for (let i = wrappers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [wrappers[i], wrappers[j]] = [wrappers[j], wrappers[i]];
-    }
+const activeFilters = new Set<string>()
+let searchTerm = ""
 
-    // Re-append in shuffled order using DocumentFragment to minimize reflows
-    const fragment = document.createDocumentFragment();
-    wrappers.forEach(wrapper => fragment.appendChild(wrapper));
-    recipesList.appendChild(fragment);
-
-    // Set fetchpriority="high" and loading="eager" for first image (LCP optimization)
-    wrappers.slice(0, 1).forEach(wrapper => {
-        const img = wrapper.querySelector('img');
-        if (img) {
-            img.setAttribute('fetchpriority', 'high');
-            img.setAttribute('loading', 'eager');
-        }
-    });
+const getTags = (recipe: HTMLElement) => {
+  try {
+    return JSON.parse(recipe.dataset.recipeTags ?? "[]") as string[]
+  } catch {
+    return []
+  }
 }
 
-// Intersection Observer for lazy loading
-const observerOptions = {
-    root: null,
-    rootMargin: '50px',
-    threshold: 0.1
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-// Observe all recipe wrappers
-document.querySelectorAll('.recipe-wrapper').forEach(wrapper => {
-    observer.observe(wrapper);
-});
-
-// Client-side interactivity for filtering and search
-let activeFilters = new Set<string>();
-let searchTerm = '';
-
-function updateRecipeDisplay() {
-    const recipeWrappers = document.querySelectorAll('.recipe-wrapper');
-
-    recipeWrappers.forEach((wrapper) => {
-        const titleAttr = wrapper.getAttribute('data-recipe-title');
-        const tagsAttr = wrapper.getAttribute('data-recipe-tags');
-
-        if (!titleAttr || !tagsAttr) return;
-
-        const title = titleAttr;
-        const tags = JSON.parse(tagsAttr);
-
-        // Check search term
-        const matchesSearch = !searchTerm || title.includes(searchTerm.toLowerCase());
-
-        // Check filters
-        const matchesFilters = activeFilters.size === 0 ||
-            Array.from(activeFilters).every(filter => tags.includes(filter));
-
-        if (matchesSearch && matchesFilters) {
-            (wrapper as HTMLElement).style.display = '';
-        } else {
-            (wrapper as HTMLElement).style.display = 'none';
-        }
-
-        // Update active state of chips within the recipe card
-        const recipeChips = wrapper.querySelectorAll('.chip[data-tag]');
-        recipeChips.forEach((chip) => {
-            const tag = chip.getAttribute('data-tag');
-            if (tag) {
-                if (activeFilters.has(tag)) {
-                    chip.classList.add('active');
-                } else {
-                    chip.classList.remove('active');
-                }
-            }
-        });
-    });
-
-    // Update visible tags based on search results
-    updateVisibleTags();
+const syncChipState = () => {
+  document
+    .querySelectorAll<HTMLButtonElement>(".chip[data-tag]")
+    .forEach((chip) => {
+      const isActive = activeFilters.has(chip.dataset.tag ?? "")
+      chip.classList.toggle("active", isActive)
+      chip.setAttribute("aria-pressed", String(isActive))
+    })
 }
 
-function updateVisibleTags() {
-    const visibleRecipes = Array.from(document.querySelectorAll('.recipe-wrapper'))
-        .filter((wrapper) => (wrapper as HTMLElement).style.display !== 'none');
+const updateRecipeDisplay = () => {
+  let visibleCount = 0
 
-    const visibleTags = new Set<string>();
-    visibleRecipes.forEach((wrapper) => {
-        const tagsAttr = wrapper.getAttribute('data-recipe-tags');
-        if (tagsAttr) {
-            const tags = JSON.parse(tagsAttr);
-            tags.forEach((tag: string) => visibleTags.add(tag));
-        }
-    });
+  recipeWrappers.forEach((recipe) => {
+    const title = recipe.dataset.recipeTitle ?? ""
+    const tags = getTags(recipe)
+    const matchesSearch = !searchTerm || title.includes(searchTerm)
+    const matchesFilters = [...activeFilters].every((tag) => tags.includes(tag))
+    const isVisible = matchesSearch && matchesFilters
 
-    // Show/hide tag chips based on visibility
-    const allChips = document.querySelectorAll('#tag-chips .chip');
-    allChips.forEach((chip) => {
-        const tag = chip.getAttribute('data-tag');
-        if (tag && !visibleTags.has(tag)) {
-            (chip as HTMLElement).style.display = 'none';
-        } else {
-            (chip as HTMLElement).style.display = '';
-        }
-    });
+    recipe.hidden = !isVisible
+    if (isVisible) visibleCount += 1
+  })
+
+  syncChipState()
+  if (recipeCount) {
+    recipeCount.textContent = `${visibleCount} ${visibleCount === 1 ? "recipe" : "recipes"}`
+  }
+  if (noRecipes) noRecipes.hidden = visibleCount !== 0
 }
 
-// Listen for search events from the MUI SearchBar component
-window.addEventListener('recipeSearch', (e: Event) => {
-    const customEvent = e as CustomEvent;
-    searchTerm = customEvent.detail.value;
-    updateRecipeDisplay();
-});
+const toggleFilter = (tag: string) => {
+  if (activeFilters.has(tag)) activeFilters.delete(tag)
+  else activeFilters.add(tag)
+  updateRecipeDisplay()
+}
 
-// Chip click handlers
-const chips = document.querySelectorAll('#tag-chips .chip[data-tag]');
-chips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-        const tag = chip.getAttribute('data-tag');
-        if (!tag) return;
+filterChips.forEach((chip) => {
+  chip.setAttribute("aria-pressed", "false")
+  chip.addEventListener("click", () => {
+    const tag = chip.dataset.tag
+    if (tag) toggleFilter(tag)
+  })
+})
 
-        if (activeFilters.has(tag)) {
-            activeFilters.delete(tag);
-            chip.classList.remove('active');
-        } else {
-            activeFilters.add(tag);
-            chip.classList.add('active');
-        }
+document.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement
+  const chip = target.closest<HTMLButtonElement>(
+    ".recipe__tags .chip[data-tag]"
+  )
+  const tag = chip?.dataset.tag
+  if (tag) toggleFilter(tag)
+})
 
-        updateRecipeDisplay();
-    });
-
-    // Keyboard support
-    chip.addEventListener('keydown', (event) => {
-        const e = event as KeyboardEvent;
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            (event.target as HTMLElement).click();
-        }
-    });
-});
-
-// Recipe tag chip handlers
-document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    const recipeChip = target.closest('.recipe__body__chips .chip[data-tag]');
-
-    if (recipeChip) {
-        const tag = recipeChip.getAttribute('data-tag');
-        if (!tag) return;
-
-        // Find corresponding filter chip and toggle it
-        const filterChip = document.querySelector(`#tag-chips .chip[data-tag="${tag}"]`);
-        if (filterChip) {
-            (filterChip as HTMLElement).click();
-        }
-    }
-});
+window.addEventListener("recipeSearch", (event) => {
+  const searchEvent = event as CustomEvent<{ value: string }>
+  searchTerm = searchEvent.detail.value.trim().toLowerCase()
+  updateRecipeDisplay()
+})

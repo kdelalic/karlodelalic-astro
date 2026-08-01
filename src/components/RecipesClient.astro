@@ -2,65 +2,79 @@
 import Recipe from "./Recipe.astro"
 import Chip from "./Chip.astro"
 import SearchBar from "./SearchBar.astro"
-import ScrollToTop from "./ScrollToTop.astro"
 import "../pages/_recipes.scss"
 
+interface RecipeData {
+  id: string
+  image?: unknown
+  notes?: string
+  slug?: string | null
+  source?: string
+  tags: string[]
+  title: string
+  type: string
+}
+
 interface Props {
-  recipes: any[]
+  recipes: RecipeData[]
 }
 
 const { recipes } = Astro.props
 
-const normalizeRecipe = (recipe: any) => ({
+const normalizedRecipes = recipes.map((recipe) => ({
   ...recipe,
-  tags: Array.isArray(recipe.tags)
-    ? recipe.tags.map((tag: string) => tag.toLowerCase())
-    : [],
-})
+  tags: recipe.tags.map((tag) => tag.toLowerCase()),
+}))
 
-const combinedRecipes = recipes.map(normalizeRecipe)
-
-// Get all unique tags (shuffle happens client-side for per-visitor randomization)
-const allTags = new Set(combinedRecipes.flatMap((recipe) => recipe.tags || []))
+const allTags = [
+  ...new Set(normalizedRecipes.flatMap((recipe) => recipe.tags)),
+].sort()
 ---
 
-<div id="recipes-container">
-  <div class="searchContainer">
-    <SearchBar />
-  </div>
-  <div class="chips" id="tag-chips">
-    {
-      [...allTags]
-        .sort()
-        .map((tag) => <Chip label={tag} data-tag={tag} active={false} />)
-    }
-  </div>
-  <div class="recipes" id="recipes-list">
-    {
-      combinedRecipes.map((recipe) => (
-        <div
-          class="recipe-wrapper"
-          data-recipe-id={recipe.id}
-          data-recipe-title={recipe.title.toLowerCase()}
-          data-recipe-tags={JSON.stringify(recipe.tags)}
-        >
-          <Recipe
-            title={recipe.title}
-            image={recipe.image}
-            source={recipe.source}
-            tags={recipe.tags}
-            notes={recipe.notes}
-            type={recipe.type}
-            slug={recipe.slug}
-            tagFilters={[]}
-          />
-        </div>
-      ))
-    }
-  </div>
+<div class="recipe-tools">
+  <SearchBar />
+  <details class="filter-panel">
+    <summary>Filter by tag</summary>
+    <div class="chips" id="tag-chips">
+      {
+        allTags.map((tag) => (
+          <Chip label={tag} data-tag={tag} active={false} />
+        ))
+      }
+    </div>
+  </details>
+  <p class="recipe-count" id="recipe-count" aria-live="polite">
+    {normalizedRecipes.length} recipes
+  </p>
 </div>
 
-<ScrollToTop />
+<div class="recipes" id="recipes-list">
+  {
+    normalizedRecipes.map((recipe) => (
+      <div
+        class="recipe-wrapper"
+        data-recipe-id={recipe.id}
+        data-recipe-title={recipe.title.toLowerCase()}
+        data-recipe-tags={JSON.stringify(recipe.tags)}
+      >
+        <Recipe
+          title={recipe.title}
+          image={recipe.image}
+          source={recipe.source}
+          tags={recipe.tags}
+          notes={recipe.notes}
+          type={recipe.type}
+          slug={recipe.slug ?? undefined}
+          tagFilters={[]}
+        />
+      </div>
+    ))
+  }
+</div>
+
+<p class="no-recipes" id="no-recipes" hidden>
+  No recipes match that search and filter combination.
+</p>
 
 <script>
   import "../scripts/recipes-filter.ts"

@@ -1,45 +1,47 @@
 {
   "name": "karlodelalic.me",
   "private": true,
-  "description": "A personal portfolio website.",
+  "description": "A minimal personal homepage and recipe collection.",
   "version": "0.1.0",
   "author": "Karlo Delalic",
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/sitemap": "^3.7.3",
     "@iconify-json/fa6-brands": "^1.2.6",
     "@iconify-json/fa6-regular": "^1.2.4",
     "@iconify-json/fa6-solid": "^1.2.4",
-    "@iconify-json/mynaui": "^1.2.17",
+    "@iconify-json/mynaui": "^1.2.19",
     "@iconify-json/twemoji": "^1.2.5",
-    "astro": "^5.17.1",
+    "astro": "^7.1.6",
     "astro-icon": "^1.1.5",
-    "decap-cms-app": "^3.10.0",
-    "fuse.js": "^7.1.0",
+    "decap-cms-app": "^3.15.1",
+    "fuse.js": "^7.5.0",
     "prismjs": "^1.30.0",
-    "sass": "^1.97.3",
-    "sharp": "^0.34.5"
+    "sass": "^1.102.0",
+    "sharp": "^0.35.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "@typescript-eslint/parser": "^8.54.0",
-    "astro-eslint-parser": "^1.2.2",
-    "eslint": "^9.39.2",
-    "eslint-plugin-astro": "^1.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.65.0",
+    "@typescript-eslint/parser": "^8.65.0",
+    "astro-eslint-parser": "^3.0.0",
+    "eslint": "^10.8.0",
+    "eslint-plugin-astro": "^3.0.1",
     "husky": "9.1.7",
-    "lint-staged": "16.2.7",
-    "prettier": "3.8.1"
+    "lint-staged": "17.3.0",
+    "prettier": "3.9.6"
   },
   "keywords": [
     "karlo delalic",
     "astro",
-    "software engineer",
+    "builder",
     "personal website"
   ],
   "license": "MIT",
   "scripts": {
     "build": "./build.sh && astro build",
     "dev": "./build.sh && astro dev",
+    "generate:icons": "bun src/scripts/generate-icons.js",
+    "generate:palettes": "bun scripts/generate-palettes.ts",
     "format": "prettier --write src/**/*.{js,jsx,tsx,astro,scss,md}",
     "preview": "astro preview",
     "astro": "astro",
@@ -58,9 +60,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kdelalic/karlodelalic.com"
+    "url": "https://github.com/kdelalic/karlodelalic-astro"
   },
   "bugs": {
-    "url": "https://github.com/kdelalic/karlodelalic.com/issues"
+    "url": "https://github.com/kdelalic/karlodelalic-astro/issues"
   }
 }

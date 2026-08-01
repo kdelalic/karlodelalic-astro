@@ -1,90 +1,56 @@
-@use "../globals/base" as *;
-
-.profile-image {
-  margin: 0 auto 1.45rem auto;
-  width: 175px;
-  height: 175px;
-  border-radius: 50%;
-  display: block;
+.home {
+  max-width: 32rem;
 }
 
-.fullname {
-  color: #363636;
-  margin-bottom: 10px;
-  font-weight: 600;
-
-  .#{$dark-class} & {
-    color: white;
-  }
+.home__intro {
+  color: var(--color-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.25rem, 5vw, 1.5rem);
+  line-height: 1.45;
+  margin-bottom: 3rem;
+  max-width: 26rem;
 }
 
-.occupation {
-  font-weight: 400;
-  color: #4a4a4a;
-  margin-bottom: 20px;
-
-  .#{$dark-class} & {
-    color: white;
-  }
+.home__section {
+  border-top: 1px solid var(--color-border);
+  padding-block: 1.25rem 1.75rem;
 }
 
-.description {
-  color: #4a4a4a;
-  font-weight: 400;
-  font-size: 18px;
-  margin-bottom: 20px;
-
-  .#{$dark-class} & {
-    color: white;
-  }
+.home__section h2 {
+  color: var(--color-muted);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
 }
 
-.social-buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 40px;
-
-  .link-button {
-    font-size: 18px;
-  }
+.app-links,
+.profile-links,
+.resource-links {
+  list-style: none;
+  margin-bottom: 0;
+  padding: 0;
 }
 
-.latest-post {
-  box-shadow: 0 -2px 0 0 $divider-shadow;
-  padding: 20px 0;
-  max-width: $width-large;
-  margin: 0 auto;
+.app-links li + li,
+.profile-links li + li,
+.resource-links li + li {
+  margin-top: 0.65rem;
+}
 
-  .#{$dark-class} & {
-    box-shadow: 0 -2px 0 0 $divider-shadow-dark;
-  }
+.app-links a,
+.resource-links a {
+  align-items: baseline;
+  display: inline-flex;
+  gap: 0.7rem;
+}
 
-  &__title {
-    margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.2;
-    gap: 5px;
-
-    &__link {
-      color: $primary-color;
-
-      &:hover {
-        color: $primary-color__hover;
-      }
-    }
-  }
-
-  &__excerpt {
-    font-size: 0.75rem;
-    color: #4a4a4a;
-    margin: 0;
-
-    .#{$dark-class} & {
-      color: white;
-    }
-  }
+.app-links__emoji,
+.resource-links__emoji {
+  display: inline-block;
+  font-size: 1.1rem;
+  text-align: center;
+  width: 1.4rem;
 }

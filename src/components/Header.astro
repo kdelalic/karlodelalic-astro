@@ -1,84 +1,13 @@
 ---
-import { Image } from "astro:assets"
-import DarkModeSwitch from "./DarkModeSwitch.astro"
-import logo from "../assets/logo.svg"
+import PalettePicker from "./PalettePicker.astro"
+import Logo from "./Logo.astro"
 import "./header.scss"
-
-const pages = [
-  { name: "blog", path: "/blog" },
-  { name: "contact", path: "/contact" },
-  { name: "projects", path: "/projects" },
-  { name: "recipes", path: "/recipes" },
-]
-
-const currentPath = Astro.url.pathname
-
-
 ---
 
-<header>
-  <div class="brand">
-    <a href="/" aria-label="Brand Logo" class="brand__logo">
-      <Image src={logo} alt="Logo" width={40} height={40} loading="eager" />
-    </a>
-    <span class="brand__name">Karlo Delalic</span>
-  </div>
-  <div class="navbar-burger" id="navbar-burger">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-  <nav class="navbar" id="navbar">
-    <a href="/" class:list={["navbar__item", { active: currentPath === "/" }]}>
-      Home
-    </a>
-    {
-      pages.map((page) => (
-        <a
-          href={page.path}
-          class:list={[
-            "navbar__item",
-            { active: currentPath.startsWith(page.path) },
-          ]}
-        >
-          {page.name}
-        </a>
-      ))
-    }
-  </nav>
-  <div class="dark-mode-switch-wrapper">
-    <DarkModeSwitch />
-  </div>
+<header class="site-header">
+  <a class="site-header__home" href="/">
+    <Logo />
+    <span>Karlo Delalic</span>
+  </a>
+  <PalettePicker />
 </header>
-
-<script>
-  const burger = document.getElementById("navbar-burger")
-  const navbar = document.getElementById("navbar")
-
-  if (burger && navbar) {
-    const toggleNavbar = () => {
-      burger.classList.toggle("open")
-      navbar.classList.toggle("open")
-    }
-
-    const closeNavbar = () => {
-      burger.classList.remove("open")
-      navbar.classList.remove("open")
-    }
-
-    burger.addEventListener("click", toggleNavbar)
-    burger.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault()
-        toggleNavbar()
-      }
-    })
-
-    navbar.addEventListener("click", closeNavbar)
-    navbar.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        closeNavbar()
-      }
-    })
-  }
-</script>

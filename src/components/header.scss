@@ -1,260 +1,47 @@
-@use "../globals/base" as *;
-
-header {
-  $header-height: 47px;
-
-  margin: 0 auto;
-  display: flex;
-  box-shadow: 0 2px 0 0 $divider-shadow;
+.site-header {
   align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: 4rem;
+}
 
-  .#{$dark-class} & {
-    box-shadow: 0 2px 0 0 $divider-shadow-dark;
-  }
+.site-header__home {
+  align-items: center;
+  display: inline-flex;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  gap: 0.6rem;
+  text-decoration: none;
+}
 
-  @media all and (max-width: $width-max) {
-    .brand {
-      margin-left: 20px;
-    }
-  }
+.site-logo {
+  display: block;
+  flex: 0 0 auto;
+  height: 1.5rem;
+  width: 1.5rem;
+}
 
-  .brand {
-    display: flex;
-    align-items: center;
+.site-logo__background {
+  fill: url("#site-logo-gradient");
+}
 
-    $logo-dimension: 24px;
+.site-logo__gradient-start {
+  stop-color: var(--color-highlight);
+}
 
-    &__logo {
-      height: $logo-dimension;
-      transition: transform 0.15s ease-in-out;
+.site-logo__gradient-end {
+  stop-color: var(--color-accent);
+}
 
-      svg,
-      img {
-        height: $logo-dimension;
-        width: $logo-dimension;
-      }
-    }
+.site-logo__letter {
+  fill: var(--color-accent-ink);
+}
 
-    &__logo:hover {
-      transform: scale(1.1);
-    }
-
-    &__name {
-      margin-left: 10px;
-
-      .#{$dark-class} & {
-        color: white;
-      }
-    }
-  }
-
-  .navbar {
-    display: flex;
-    flex: 1;
-    justify-content: flex-end;
-
-    &__item {
-      padding: 10px 20px;
-      text-decoration: none;
-      color: #595959;
-      border-bottom: 1px solid transparent;
-      text-transform: capitalize;
-
-      .#{$dark-class} & {
-        color: white;
-      }
-
-      &:hover {
-        border-bottom: 1px solid $primary-color__hover;
-      }
-    }
-
-    .active {
-      color: $primary-color;
-    }
-  }
-
-  @media all and (min-width: $width-max) {
-    max-width: $width-max - 50px;
-    width: $width-max - 50px;
-  }
-
-  .dark-mode-switch-wrapper {
-    display: flex;
-    align-items: center;
-    min-width: 58px; // Reserve space for the switch
-    min-height: 38px;
-  }
-
-  .dark-mode-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 44px;
-    height: 44px;
-    padding: 10px;
-    border-radius: 50%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background-color: rgba(103, 114, 229, 0.1);
-      transform: scale(1.1);
-    }
-
-    .#{$dark-class} & {
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-    }
-
-    .icon-container {
-      width: 24px;
-      height: 24px;
-      position: relative;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-
-      .#{$dark-class} & {
-        transform: rotate(180deg);
-      }
-    }
-
-    .icon {
-      width: 24px;
-      height: 24px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .sun-icon {
-      opacity: 1;
-      transform: rotate(0deg);
-
-      .#{$dark-class} & {
-        opacity: 0;
-        transform: rotate(-90deg);
-      }
-    }
-
-    .moon-icon {
-      opacity: 0;
-
-      .#{$dark-class} & {
-        opacity: 1;
-        color: #94A3B8;
-        transform: rotate(180deg);
-      }
-    }
-  }
-
-  @media all and (max-width: ($width-max - 1px)) {
-    max-width: 100%;
-    width: 100%;
-
-    .dark-mode-switch-wrapper,
-    .#{$dark-class}-switch {
-      display: none;
-    }
-
-    .navbar {
-      display: none;
-
-      &__item {
-        border-bottom: none;
-        color: white;
-        text-transform: uppercase;
-        font-size: 40px;
-
-        &:hover {
-          color: $primary-color;
-          border-bottom: none;
-        }
-      }
-
-      &.open {
-        display: flex;
-        position: fixed;
-        width: 100%;
-        left: 0;
-        z-index: 100;
-        background: rgba(0, 0, 0, 0.92);
-        height: 100%;
-        text-align: center;
-        top: 0;
-        justify-content: center;
-        flex-direction: column;
-      }
-    }
-
-    .navbar-burger {
-      z-index: 200;
-      cursor: pointer;
-      display: block;
-      height: $header-height;
-      position: relative;
-      width: $header-height;
-      margin-left: auto;
-
-      &:hover {
-        background-color: #f1f1f1;
-
-        .#{$dark-class} & {
-          background-color: #424242;
-        }
-      }
-
-      span {
-        background-color: $primary-color;
-        display: block;
-        height: 1px;
-        left: calc(50% - 8px);
-        position: absolute;
-        transform-origin: center;
-        transition-duration: 86ms;
-        transition-property: background-color, opacity, transform;
-        transition-timing-function: ease-out;
-        width: 16px;
-
-        &:nth-child(1) {
-          top: calc(50% - 6px);
-        }
-
-        &:nth-child(2) {
-          top: calc(50% - 1px);
-        }
-
-        &:nth-child(3) {
-          top: calc(50% + 4px);
-        }
-      }
-
-      &.open {
-        &:hover {
-          background-color: transparent;
-        }
-
-        span {
-          background-color: white;
-
-          &:nth-child(1) {
-            transform: translateY(5px) rotate(45deg);
-          }
-
-          &:nth-child(2) {
-            opacity: 0;
-          }
-
-          &:nth-child(3) {
-            transform: translateY(-5px) rotate(-45deg);
-          }
-        }
-      }
-    }
-  }
+.site-header__home:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 0.2em;
 }

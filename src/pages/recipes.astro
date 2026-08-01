@@ -4,7 +4,11 @@ import BaseLayout from "../layouts/BaseLayout.astro"
 import Header from "../components/Header.astro"
 import RecipesClient from "../components/RecipesClient.astro"
 
-const allRecipes = await getCollection("recipes")
+const allRecipes = (await getCollection("recipes")).sort((first, second) =>
+  first.data.title.localeCompare(second.data.title, "en", {
+    sensitivity: "base",
+  })
+)
 
 // Prepare recipes data
 const recipesData = allRecipes.map((recipe) => {
@@ -15,23 +19,23 @@ const recipesData = allRecipes.map((recipe) => {
     source: recipe.data.source,
     notes: recipe.data.notes,
     type: recipe.data.type,
-    slug: recipe.slug.includes("custom-recipes")
-      ? `/custom-recipes/${recipe.slug.split("/")[1]}`
-      : null,
+    slug:
+      recipe.data.type === "custom-recipe"
+        ? `/custom-recipes/${recipe.id}`
+        : null,
     image: recipe.data.image,
   }
 })
 
-const keywords = [
-  "karlo delalic",
-  "portfolio",
-  "distributed systems",
-  "software engineer",
-  "recipes",
-]
+const keywords = ["karlo delalic", "recipes", "personal recipe collection"]
 ---
 
-<BaseLayout title="Recipes" keywords={keywords}>
+<BaseLayout
+  title="Recipes"
+  description="Karlo Delalic's searchable personal recipe collection."
+  keywords={keywords}
+  wide={true}
+>
   <Header slot="header" />
   <RecipesClient recipes={recipesData} />
 </BaseLayout>

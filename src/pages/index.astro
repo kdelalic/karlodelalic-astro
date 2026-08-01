@@ -1,66 +1,74 @@
 ---
-import { getCollection } from "astro:content"
-import { Image } from "astro:assets"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import Header from "../components/Header.astro"
-import { Icon } from "astro-icon/components"
-import profileImage from "../assets/profile.png"
 import "./_index.scss"
 
-const blogPosts = await getCollection("blog")
-const sortedBlogPosts = blogPosts.sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-)
-const latestPost = sortedBlogPosts[0]
-
-const keywords = [
-  "karlo delalic",
-  "portfolio",
-  "distributed systems",
-  "software engineer",
-  "home page",
-  "latest blog post",
+const apps = [
+  {
+    name: "Campground Checker",
+    emoji: "🏕️",
+    href: "https://campsite.karlodelalic.me",
+  },
+  {
+    name: "Recipe Generator",
+    emoji: "🪄",
+    href: "https://recipe.karlodelalic.me",
+  },
+  {
+    name: "TDEE Calculator",
+    emoji: "⚖️",
+    href: "https://tdee.karlodelalic.me",
+  },
+  { name: "Recipes", emoji: "🍲", href: "/recipes" },
 ]
 ---
 
-<BaseLayout keywords={keywords} centered={true} hidePageTitle={true}>
+<BaseLayout hidePageTitle={true}>
   <Header slot="header" />
-  <Image
-    class="profile-image"
-    src={profileImage}
-    alt="Karlo Delalic's profile"
-    width={200}
-    loading="eager"
-  />
-  <h1 class="fullname">Karlo Delalic</h1>
-  <h2 class="occupation">Software Engineer</h2>
-  <h3 class="description">I like to make cool things.</h3>
-  <div class="social-buttons">
-    <a class="link-button ghost" href="/blog">
-      <Icon name="fa6-solid:pencil" /> Writings
-    </a>
-    <a
-      class="link-button ghost"
-      href="https://github.com/kdelalic"
-      target="_blank"
-      rel="nofollow noopener noreferrer"
-    >
-      <Icon name="fa6-brands:github" /> Github
-    </a>
-  </div>
-  {
-    latestPost && (
-      <div class="latest-post">
-        <h3 class="latest-post__title">
-          <a class="latest-post__title__link" href={`/blog/${latestPost.slug}`}>
-            {latestPost.data.title}
+  <div class="home">
+    <h1 class="visually-hidden">Karlo Delalic</h1>
+    <p class="home__intro">
+      Builder. A small collection of things I make and use.
+    </p>
+
+    <section class="home__section" aria-labelledby="apps-heading">
+      <h2 id="apps-heading">Apps</h2>
+      <ul class="app-links">
+        {
+          apps.map((app) => (
+            <li>
+              <a href={app.href}>
+                <span class="app-links__emoji" aria-hidden="true">
+                  {app.emoji}
+                </span>
+                <span>{app.name}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="home__section" aria-labelledby="elsewhere-heading">
+      <h2 id="elsewhere-heading">Elsewhere</h2>
+      <ul class="profile-links">
+        <li><a href="https://github.com/kdelalic">GitHub</a></li>
+        <li>
+          <a href="https://www.linkedin.com/in/karlodelalic/">LinkedIn</a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="home__section" aria-labelledby="useful-heading">
+      <h2 id="useful-heading">Useful</h2>
+      <ul class="resource-links">
+        <li>
+          <a href="https://gist.github.com/n1snt/2cccc8aa5f7b645a7628d3512c70deb6">
+            <span class="resource-links__emoji" aria-hidden="true">⌨️</span>
+            <span>Fast, minimal Zsh setup by n1snt</span>
           </a>
-          <span class="tag">Latest writing</span>
-        </h3>
-        <p class="latest-post__excerpt">
-          {latestPost.body.split("<!-- end -->")[0].trim()}
-        </p>
-      </div>
-    )
-  }
+        </li>
+      </ul>
+    </section>
+  </div>
 </BaseLayout>

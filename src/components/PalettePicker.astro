@@ -1,0 +1,54 @@
+---
+import { palettes } from "../data/palettes"
+import "./palette-picker.scss"
+---
+
+<div class="palette-picker">
+  <label class="visually-hidden" for="palette-picker">Color palette</label>
+  <select id="palette-picker" data-palette-picker aria-label="Color palette">
+    {
+      palettes.map((palette) => (
+        <option value={palette.id}>{palette.emoji}</option>
+      ))
+    }
+  </select>
+</div>
+
+<script>
+  import { palettes } from "../data/palettes"
+  import { applyPaletteFavicon } from "../scripts/palette-favicon"
+
+  const picker = document.querySelector<HTMLSelectElement>(
+    "[data-palette-picker]"
+  )
+  const storageKey = "karlodelalic-palette"
+
+  const applyPalette = (paletteId: string) => {
+    const palette = palettes.find((entry) => entry.id === paletteId)
+    if (!palette) return
+
+    document.documentElement.dataset.palette = palette.id
+    picker?.setAttribute("title", palette.name)
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", palette.colors.canvas)
+    applyPaletteFavicon(palette)
+
+    try {
+      sessionStorage.setItem(storageKey, palette.id)
+    } catch {
+      // The palette still applies when storage is unavailable.
+    }
+  }
+
+  if (picker) {
+    const currentPalette = document.documentElement.dataset.palette
+    if (currentPalette) {
+      picker.value = currentPalette
+      const palette = palettes.find((entry) => entry.id === currentPalette)
+      if (palette) picker.title = palette.name
+    }
+
+    picker.addEventListener("change", () => applyPalette(picker.value))
+  }
+</script>

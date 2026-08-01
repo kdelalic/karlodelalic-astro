@@ -1,30 +1,40 @@
 
-import sharp from 'sharp';
-import fs from 'fs';
-import path from 'path';
+import { Buffer } from "node:buffer"
+import { writeFile } from "node:fs/promises"
+import { fileURLToPath } from "node:url"
+import sharp from "sharp"
 
-const input = 'src/assets/icon.png';
-const outDir = 'public/icons';
+const input = fileURLToPath(
+  new URL("../../public/favicon.svg", import.meta.url)
+)
+const faviconOutput = fileURLToPath(
+  new URL("../../public/favicon.ico", import.meta.url)
+)
+const touchIconOutput = fileURLToPath(
+  new URL("../../public/apple-touch-icon.png", import.meta.url)
+)
 
-if (!fs.existsSync(outDir)) {
-  fs.mkdirSync(outDir, { recursive: true });
+const createIco = (png) => {
+  const directory = Buffer.alloc(22)
+  directory.writeUInt16LE(0, 0)
+  directory.writeUInt16LE(1, 2)
+  directory.writeUInt16LE(1, 4)
+  directory.writeUInt8(32, 6)
+  directory.writeUInt8(32, 7)
+  directory.writeUInt8(0, 8)
+  directory.writeUInt8(0, 9)
+  directory.writeUInt16LE(1, 10)
+  directory.writeUInt16LE(32, 12)
+  directory.writeUInt32LE(png.length, 14)
+  directory.writeUInt32LE(directory.length, 18)
+  return Buffer.concat([directory, png])
 }
 
-async function generate() {
-  console.log('Generating icons...');
-  try {
-    await sharp(input).resize(192, 192).toFile(path.join(outDir, 'icon-192.png'));
-    console.log('Created icon-192.png');
-    
-    await sharp(input).resize(512, 512).toFile(path.join(outDir, 'icon-512.png'));
-    console.log('Created icon-512.png');
+const faviconPng = await sharp(input).resize(32, 32).png().toBuffer()
 
-    await sharp(input).resize(180, 180).toFile('public/apple-touch-icon.png');
-    console.log('Created apple-touch-icon.png');
-  } catch (err) {
-    console.error('Error generating icons:', err);
-    process.exit(1);
-  }
-}
+await Promise.all([
+  writeFile(faviconOutput, createIco(faviconPng)),
+  sharp(input).resize(180, 180).png().toFile(touchIconOutput),
+])
 
-generate();
+console.log("Generated favicon and Apple touch icon.")

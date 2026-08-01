@@ -1,41 +1,39 @@
 ---
 import "../globals/_base.scss"
 import "../components/layout.scss"
-import { getImage } from "astro:assets"
-import icon from "../assets/icon.png"
+import { palettes } from "../data/palettes"
 
 interface Props {
   title?: string
   description?: string
   keywords?: string[]
   centered?: boolean
+  wide?: boolean
   date?: string
   hidePageTitle?: boolean
 }
 
 const {
   title = "Karlo Delalic",
-  description = "Karlo Delalic is a software engineer who is experienced with building highly reliable and performant distributed systems.",
-  keywords = [
-    "karlo delalic",
-    "portfolio",
-    "distributed systems",
-    "software engineer",
-  ],
+  description = "Karlo Delalic is a builder. Find his small personal projects, recipes, and profiles.",
+  keywords = ["karlo delalic", "builder", "personal projects"],
   centered = false,
+  wide = false,
   date,
   hidePageTitle = false,
 } = Astro.props
 
 const siteUrl = "https://karlodelalic.me"
-const canonicalURL = new URL(Astro.url.pathname, siteUrl)
+const canonicalPath = Astro.url.pathname
+  .replace(/\/index\.html$/, "/")
+  .replace(/\.html$/, "")
+const canonicalURL = new URL(canonicalPath, siteUrl)
+const socialImageURL = new URL("/og.png", siteUrl)
 
-const optimizedIcon = await getImage({
-  src: icon,
-  width: 32,
-  height: 32,
-  format: "png",
-})
+const paletteIds = palettes.map((palette) => palette.id)
+const paletteCanvasColors = Object.fromEntries(
+  palettes.map((palette) => [palette.id, palette.colors.canvas])
+)
 ---
 
 <!doctype html>
@@ -43,11 +41,20 @@ const optimizedIcon = await getImage({
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" href={optimizedIcon.src} />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link
+      rel="icon"
+      href="/favicon.svg"
+      type="image/svg+xml"
+      sizes="any"
+      data-palette-favicon
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png"
+      sizes="180x180"
+    />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -57,81 +64,72 @@ const optimizedIcon = await getImage({
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <meta name="theme-color" content="#6772e5" />
+    <meta property="og:image" content={socialImageURL} />
+    <meta
+      property="og:image:alt"
+      content="A cozy campsite illustration beside the words Karlo Delalic, Builder."
+    />
+    <meta name="theme-color" content={palettes[0].colors.canvas} />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:image" content={socialImageURL} />
     <meta name="twitter:creator" content="@karlodelalic" />
 
-    <script is:inline>
+    <script is:inline define:vars={{ paletteIds, paletteCanvasColors }}>
       ;(function () {
-        function setTheme(theme) {
-          if (theme === "dark") {
-            document.documentElement.className = "dark"
-          } else {
-            document.documentElement.className = ""
-          }
-          window.__theme = theme
-        }
-
-        window.__setPreferredTheme = function (theme) {
-          setTheme(theme)
-          try {
-            localStorage.setItem("preferred-theme", theme)
-          } catch (e) {}
-        }
-
-        let preferredTheme
+        const storageKey = "karlodelalic-palette"
+        let previousPalette
         try {
-          preferredTheme = localStorage.getItem("preferred-theme")
-        } catch (e) {}
+          previousPalette = sessionStorage.getItem(storageKey)
+        } catch {}
 
-        const darkQuery = window.matchMedia("(prefers-color-scheme: dark)")
-        setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"))
+        const navigation = performance.getEntriesByType("navigation")[0]
+        const isReload =
+          (navigation && navigation.type === "reload") ||
+          (performance.navigation && performance.navigation.type === 1)
+        const hasValidPrevious = paletteIds.includes(previousPalette)
+        let palette = hasValidPrevious && !isReload ? previousPalette : null
+
+        if (!palette) {
+          const choices = isReload && hasValidPrevious
+            ? paletteIds.filter((id) => id !== previousPalette)
+            : paletteIds
+          palette = choices[Math.floor(Math.random() * choices.length)]
+        }
+
+        document.documentElement.dataset.palette = palette
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute("content", paletteCanvasColors[palette])
+
+        try {
+          sessionStorage.setItem(storageKey, palette)
+        } catch {}
       })()
     </script>
+    <script>
+      import { palettes } from "../data/palettes"
+      import { applyPaletteFavicon } from "../scripts/palette-favicon"
 
-    <style is:global>
-      html {
-        font-family:
-          "Avenir Next", "Helvetica Neue", "Segoe UI", Helvetica, Arial,
-          sans-serif;
-        -ms-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-      }
-
-      body {
-        font-size: 18px;
-        font-weight: 400;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        margin: 0;
-        padding: 0;
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-weight: 600;
-        font-family:
-          "Avenir Next", "Helvetica Neue", "Segoe UI", Helvetica, Arial,
-          sans-serif;
-      }
-
-      strong,
-      b {
-        font-weight: 700;
-      }
-    </style>
+      const palette = palettes.find(
+        (entry) => entry.id === document.documentElement.dataset.palette
+      )
+      if (palette) applyPaletteFavicon(palette)
+    </script>
   </head>
   <body>
-    <slot name="header" />
-    <div class={centered ? "content centered" : "content"}>
+    <div class:list={["site-frame", { "site-frame--wide": wide }]}>
+      <slot name="header" />
+    </div>
+    <div
+      class:list={[
+        "content",
+        { centered, "content--wide": wide },
+      ]}
+    >
       {!hidePageTitle && title && <h1 class="title">{title}</h1>}
       {date && <p class="date">{date}</p>}
       <main>
