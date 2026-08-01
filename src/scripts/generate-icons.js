@@ -1,6 +1,5 @@
-
 import { Buffer } from "node:buffer"
-import { writeFile } from "node:fs/promises"
+import { mkdir, writeFile } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 import sharp from "sharp"
 
@@ -12,6 +11,15 @@ const faviconOutput = fileURLToPath(
 )
 const touchIconOutput = fileURLToPath(
   new URL("../../public/apple-touch-icon.png", import.meta.url)
+)
+const appIconsDirectory = fileURLToPath(
+  new URL("../../public/icons", import.meta.url)
+)
+const appIcon192Output = fileURLToPath(
+  new URL("../../public/icons/icon-192.png", import.meta.url)
+)
+const appIcon512Output = fileURLToPath(
+  new URL("../../public/icons/icon-512.png", import.meta.url)
 )
 
 const createIco = (png) => {
@@ -32,9 +40,13 @@ const createIco = (png) => {
 
 const faviconPng = await sharp(input).resize(32, 32).png().toBuffer()
 
+await mkdir(appIconsDirectory, { recursive: true })
+
 await Promise.all([
   writeFile(faviconOutput, createIco(faviconPng)),
   sharp(input).resize(180, 180).png().toFile(touchIconOutput),
+  sharp(input).resize(192, 192).png().toFile(appIcon192Output),
+  sharp(input).resize(512, 512).png().toFile(appIcon512Output),
 ])
 
-console.log("Generated favicon and Apple touch icon.")
+console.log("Generated browser, Apple touch, and web app icons.")

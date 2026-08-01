@@ -84,11 +84,69 @@
   column-gap: 2rem;
 }
 
+.recipe-wrapper {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  position: relative;
+}
+
+html.recipe-effects-enabled .recipe-wrapper {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+html.recipe-effects-enabled .recipe-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .no-recipes {
   border: 1px solid var(--color-border);
   border-radius: 8px;
   color: var(--color-muted);
   padding: 1rem;
+}
+
+.scroll-to-top {
+  align-items: center;
+  background: var(--color-accent);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  bottom: 1.875rem;
+  color: var(--color-accent-ink);
+  cursor: pointer;
+  display: flex;
+  height: 3rem;
+  justify-content: center;
+  opacity: 0;
+  padding: 0;
+  position: fixed;
+  right: 1.875rem;
+  transform: translateY(20px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0.3s ease;
+  visibility: hidden;
+  width: 3rem;
+  z-index: 1000;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.scroll-to-top:hover {
+  transform: translateY(-2px);
+}
+
+.scroll-to-top:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 900px) {
@@ -123,5 +181,12 @@
   .recipe-wrapper {
     margin-inline: auto;
     max-width: 25rem;
+  }
+
+  .scroll-to-top {
+    bottom: 1.25rem;
+    height: 2.75rem;
+    right: 1.25rem;
+    width: 2.75rem;
   }
 }

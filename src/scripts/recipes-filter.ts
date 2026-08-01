@@ -1,6 +1,7 @@
-const recipeWrappers = Array.from(
-  document.querySelectorAll<HTMLElement>(".recipe-wrapper")
-)
+const recipesList = document.querySelector<HTMLElement>("#recipes-list")
+const recipeWrappers = recipesList
+  ? Array.from(recipesList.querySelectorAll<HTMLElement>(".recipe-wrapper"))
+  : []
 const filterChips = Array.from(
   document.querySelectorAll<HTMLButtonElement>("#tag-chips .chip[data-tag]")
 )
@@ -9,6 +10,51 @@ const noRecipes = document.querySelector<HTMLElement>("#no-recipes")
 
 const activeFilters = new Set<string>()
 let searchTerm = ""
+
+const shuffleRecipes = () => {
+  if (!recipesList) return
+
+  for (let index = recipeWrappers.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    ;[recipeWrappers[index], recipeWrappers[randomIndex]] = [
+      recipeWrappers[randomIndex],
+      recipeWrappers[index],
+    ]
+  }
+
+  const fragment = document.createDocumentFragment()
+  recipeWrappers.forEach((recipe) => fragment.appendChild(recipe))
+  recipesList.appendChild(fragment)
+
+  const firstImage = recipeWrappers[0]?.querySelector<HTMLImageElement>("img")
+  firstImage?.setAttribute("fetchpriority", "high")
+  firstImage?.setAttribute("loading", "eager")
+}
+
+const revealRecipesOnScroll = () => {
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches
+
+  if (reducedMotion || !("IntersectionObserver" in window)) {
+    recipeWrappers.forEach((recipe) => recipe.classList.add("visible"))
+    return
+  }
+
+  document.documentElement.classList.add("recipe-effects-enabled")
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add("visible")
+        observer.unobserve(entry.target)
+      })
+    },
+    { rootMargin: "50px", threshold: 0.1 }
+  )
+
+  recipeWrappers.forEach((recipe) => observer.observe(recipe))
+}
 
 const getTags = (recipe: HTMLElement) => {
   try {
@@ -28,6 +74,20 @@ const syncChipState = () => {
     })
 }
 
+const updateVisibleTags = () => {
+  const visibleTags = new Set<string>()
+
+  recipeWrappers.forEach((recipe) => {
+    if (recipe.hidden) return
+    getTags(recipe).forEach((tag) => visibleTags.add(tag))
+  })
+
+  filterChips.forEach((chip) => {
+    const tag = chip.dataset.tag ?? ""
+    chip.hidden = !activeFilters.has(tag) && !visibleTags.has(tag)
+  })
+}
+
 const updateRecipeDisplay = () => {
   let visibleCount = 0
 
@@ -43,6 +103,7 @@ const updateRecipeDisplay = () => {
   })
 
   syncChipState()
+  updateVisibleTags()
   if (recipeCount) {
     recipeCount.textContent = `${visibleCount} ${visibleCount === 1 ? "recipe" : "recipes"}`
   }
@@ -77,3 +138,7 @@ window.addEventListener("recipeSearch", (event) => {
   searchTerm = searchEvent.detail.value.trim().toLowerCase()
   updateRecipeDisplay()
 })
+
+shuffleRecipes()
+revealRecipesOnScroll()
+updateRecipeDisplay()

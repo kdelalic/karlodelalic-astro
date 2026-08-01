@@ -2,6 +2,7 @@
 import Recipe from "./Recipe.astro"
 import Chip from "./Chip.astro"
 import SearchBar from "./SearchBar.astro"
+import ScrollToTop from "./ScrollToTop.astro"
 import "../pages/_recipes.scss"
 
 interface RecipeData {
@@ -75,6 +76,8 @@ const allTags = [
 <p class="no-recipes" id="no-recipes" hidden>
   No recipes match that search and filter combination.
 </p>
+
+<ScrollToTop />
 
 <script>
   import "../scripts/recipes-filter.ts"

@@ -29,6 +29,11 @@ const {
 const destination = type === "custom-recipe" ? slug : source
 const isExternal = type !== "custom-recipe"
 const tagFiltersSet = new Set(tagFilters)
+const displayTitle = title
+  .split(" ")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ")
+const sortedTags = [...tags].sort()
 ---
 
 <article class="recipe">
@@ -39,11 +44,11 @@ const tagFiltersSet = new Set(tagFilters)
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "nofollow noopener noreferrer" : undefined}
         class="recipe__image-link"
-        aria-label={`Open ${title}${isExternal ? " in a new tab" : ""}`}
+        aria-label={`Open ${displayTitle}${isExternal ? " in a new tab" : ""}`}
       >
         <Picture
           src={image}
-          alt={title}
+          alt={displayTitle}
           class="recipe__image"
           widths={[300, 450, 600, 800]}
           sizes="(max-width: 700px) 100vw, (max-width: 1088px) 50vw, 33vw"
@@ -62,7 +67,7 @@ const tagFiltersSet = new Set(tagFilters)
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "nofollow noopener noreferrer" : undefined}
         >
-          {title}
+          {displayTitle}
           {
             isExternal && (
               <Icon
@@ -75,14 +80,14 @@ const tagFiltersSet = new Set(tagFilters)
           {isExternal && <span class="visually-hidden"> (opens in a new tab)</span>}
         </a>
       ) : (
-        title
+        displayTitle
       )
     }
   </h2>
   {
     tags.length > 0 && (
-      <div class="recipe__tags" aria-label={`Tags for ${title}`}>
-        {tags.map((tag) => (
+      <div class="recipe__tags" aria-label={`Tags for ${displayTitle}`}>
+        {sortedTags.map((tag) => (
           <Chip label={tag} data-tag={tag} active={tagFiltersSet.has(tag)} />
         ))}
       </div>
