@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content"
 import { glob } from "astro/loaders"
 import { z } from "astro/zod"
+import { normalizeRecipeTags } from "./data/recipeTags"
 
 const indexMarkdown = (base: string) =>
   glob({
@@ -37,7 +38,7 @@ const recipes = defineCollection({
     z.object({
       title: z.string(),
       type: z.enum(["recipe", "custom-recipe"]),
-      tags: z.array(z.string()).optional(),
+      tags: z.array(z.string()).transform(normalizeRecipeTags).optional(),
       source: z.string().optional(),
       notes: z.string().optional(),
       ingredients: z.array(z.string()).optional(),

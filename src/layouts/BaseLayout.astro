@@ -81,25 +81,22 @@ const paletteCanvasColors = Object.fromEntries(
 
     <script is:inline define:vars={{ paletteIds, paletteCanvasColors }}>
       ;(function () {
-        const storageKey = "karlodelalic-palette"
-        let previousPalette
+        const preferenceKey = "karlodelalic-palette"
+        const sessionKey = "karlodelalic-palette-session"
+        let preferredPalette
+        let sessionPalette
         try {
-          previousPalette = sessionStorage.getItem(storageKey)
+          preferredPalette = localStorage.getItem(preferenceKey)
+        } catch {}
+        try {
+          sessionPalette = sessionStorage.getItem(sessionKey)
         } catch {}
 
-        const navigation = performance.getEntriesByType("navigation")[0]
-        const isReload =
-          (navigation && navigation.type === "reload") ||
-          (performance.navigation && performance.navigation.type === 1)
-        const hasValidPrevious = paletteIds.includes(previousPalette)
-        let palette = hasValidPrevious && !isReload ? previousPalette : null
-
-        if (!palette) {
-          const choices = isReload && hasValidPrevious
-            ? paletteIds.filter((id) => id !== previousPalette)
-            : paletteIds
-          palette = choices[Math.floor(Math.random() * choices.length)]
-        }
+        const palette = paletteIds.includes(preferredPalette)
+          ? preferredPalette
+          : paletteIds.includes(sessionPalette)
+            ? sessionPalette
+            : paletteIds[Math.floor(Math.random() * paletteIds.length)]
 
         document.documentElement.dataset.palette = palette
         document
@@ -107,7 +104,7 @@ const paletteCanvasColors = Object.fromEntries(
           ?.setAttribute("content", paletteCanvasColors[palette])
 
         try {
-          sessionStorage.setItem(storageKey, palette)
+          sessionStorage.setItem(sessionKey, palette)
         } catch {}
       })()
     </script>
@@ -122,6 +119,7 @@ const paletteCanvasColors = Object.fromEntries(
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class:list={["site-frame", { "site-frame--wide": wide }]}>
       <slot name="header" />
     </div>
@@ -131,9 +129,9 @@ const paletteCanvasColors = Object.fromEntries(
         { centered, "content--wide": wide },
       ]}
     >
-      {!hidePageTitle && title && <h1 class="title">{title}</h1>}
-      {date && <p class="date">{date}</p>}
-      <main>
+      <main id="main-content" tabindex="-1">
+        {!hidePageTitle && title && <h1 class="title">{title}</h1>}
+        {date && <p class="date">{date}</p>}
         <slot />
       </main>
     </div>

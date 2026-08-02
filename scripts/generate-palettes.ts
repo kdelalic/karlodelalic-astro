@@ -21,7 +21,7 @@ const colorToRgb = (color: string) => {
 const luminance = (color: string) => {
   const channels = colorToRgb(color).map((channel) => {
     const normalized = channel / 255
-    return normalized <= 0.03928
+    return normalized <= 0.04045
       ? normalized / 12.92
       : ((normalized + 0.055) / 1.055) ** 2.4
   })
@@ -93,10 +93,52 @@ for (const palette of palettes) {
   )
   assertContrast(
     palette.name,
+    palette.colors.accentText,
+    palette.colors.canvas,
+    4.5,
+    "accent text on canvas"
+  )
+  assertContrast(
+    palette.name,
+    palette.colors.accentText,
+    palette.colors.surface,
+    4.5,
+    "accent text on surface"
+  )
+  assertContrast(
+    palette.name,
+    palette.colors.selectionInk,
+    palette.colors.highlight,
+    4.5,
+    "selection ink on highlight"
+  )
+  assertContrast(
+    palette.name,
+    palette.colors.border,
+    palette.colors.canvas,
+    3,
+    "border on canvas"
+  )
+  assertContrast(
+    palette.name,
+    palette.colors.border,
+    palette.colors.surface,
+    3,
+    "border on surface"
+  )
+  assertContrast(
+    palette.name,
     palette.colors.focus,
     palette.colors.canvas,
     3,
     "focus on canvas"
+  )
+  assertContrast(
+    palette.name,
+    palette.colors.focus,
+    palette.colors.surface,
+    3,
+    "focus on surface"
   )
 }
 

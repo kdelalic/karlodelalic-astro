@@ -70,7 +70,7 @@ a {
 }
 
 a:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 a:hover,
@@ -95,7 +95,24 @@ button {
 
 ::selection {
   background: var(--color-highlight);
+  color: var(--color-selection-ink);
+}
+
+.skip-link {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
   color: var(--color-ink);
+  font-weight: 700;
+  left: 1rem;
+  padding: 0.5rem 0.75rem;
+  position: fixed;
+  top: 1rem;
+  transform: translateY(calc(-100% - 2rem));
+  z-index: 2000;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 [hidden] {

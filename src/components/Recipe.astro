@@ -9,7 +9,6 @@ interface Props {
   source?: string
   tags?: string[]
   title: string
-  tagFilters: string[]
   notes?: string
   type?: string
   slug?: string
@@ -20,7 +19,6 @@ const {
   source,
   tags = [],
   title,
-  tagFilters = [],
   notes,
   type,
   slug,
@@ -28,7 +26,6 @@ const {
 
 const destination = type === "custom-recipe" ? slug : source
 const isExternal = type !== "custom-recipe"
-const tagFiltersSet = new Set(tagFilters)
 const displayTitle = title
   .split(" ")
   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -38,25 +35,17 @@ const sortedTags = [...tags].sort()
 
 <article class="recipe">
   {
-    image && destination && (
-      <a
-        href={destination}
-        target={isExternal ? "_blank" : undefined}
-        rel={isExternal ? "nofollow noopener noreferrer" : undefined}
-        class="recipe__image-link"
-        aria-label={`Open ${displayTitle}${isExternal ? " in a new tab" : ""}`}
-      >
-        <Picture
-          src={image}
-          alt={displayTitle}
-          class="recipe__image"
-          widths={[300, 450, 600, 800]}
-          sizes="(max-width: 700px) 100vw, (max-width: 1088px) 50vw, 33vw"
-          formats={["avif", "webp"]}
-          quality={70}
-          loading="lazy"
-        />
-      </a>
+    image && (
+      <Picture
+        src={image}
+        alt=""
+        class="recipe__image"
+        widths={[300, 450, 600, 800]}
+        sizes="(max-width: 700px) 100vw, (max-width: 1088px) 50vw, 33vw"
+        formats={["avif", "webp"]}
+        quality={70}
+        loading="lazy"
+      />
     )
   }
   <h2 class="recipe__title">
@@ -88,7 +77,7 @@ const sortedTags = [...tags].sort()
     tags.length > 0 && (
       <div class="recipe__tags" aria-label={`Tags for ${displayTitle}`}>
         {sortedTags.map((tag) => (
-          <Chip label={tag} data-tag={tag} active={tagFiltersSet.has(tag)} />
+          <Chip label={tag} />
         ))}
       </div>
     )

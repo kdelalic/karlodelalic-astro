@@ -3,6 +3,10 @@ import Recipe from "./Recipe.astro"
 import Chip from "./Chip.astro"
 import SearchBar from "./SearchBar.astro"
 import ScrollToTop from "./ScrollToTop.astro"
+import {
+  groupRecipeTags,
+  normalizeRecipeTags,
+} from "../data/recipeTags"
 import "../pages/_recipes.scss"
 
 interface RecipeData {
@@ -24,22 +28,34 @@ const { recipes } = Astro.props
 
 const normalizedRecipes = recipes.map((recipe) => ({
   ...recipe,
-  tags: recipe.tags.map((tag) => tag.toLowerCase()),
+  tags: normalizeRecipeTags(recipe.tags),
 }))
 
 const allTags = [
   ...new Set(normalizedRecipes.flatMap((recipe) => recipe.tags)),
 ].sort()
+const tagGroups = groupRecipeTags(allTags)
 ---
 
 <div class="recipe-tools">
   <SearchBar />
+  <a class="skip-link" href="#recipes-list">Skip to recipe results</a>
   <details class="filter-panel">
-    <summary>Filter by tag</summary>
-    <div class="chips" id="tag-chips">
+    <summary>
+      <span class="filter-panel__label">Filter recipes</span>
+      <span class="filter-panel__status" id="filter-status"></span>
+    </summary>
+    <div class="filter-groups" id="tag-chips">
       {
-        allTags.map((tag) => (
-          <Chip label={tag} data-tag={tag} active={false} />
+        tagGroups.map((group) => (
+          <section class="filter-group" data-filter-group>
+            <h2 class="filter-group__title">{group.label}</h2>
+            <div class="chips">
+              {group.tags.map((tag) => (
+                <Chip label={tag} data-tag={tag} active={false} />
+              ))}
+            </div>
+          </section>
         ))
       }
     </div>
@@ -49,7 +65,7 @@ const allTags = [
   </p>
 </div>
 
-<div class="recipes" id="recipes-list">
+<div class="recipes" id="recipes-list" tabindex="-1">
   {
     normalizedRecipes.map((recipe) => (
       <div
@@ -66,7 +82,6 @@ const allTags = [
           notes={recipe.notes}
           type={recipe.type}
           slug={recipe.slug ?? undefined}
-          tagFilters={[]}
         />
       </div>
     ))

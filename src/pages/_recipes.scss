@@ -59,16 +59,40 @@
 
 .filter-panel summary {
   cursor: pointer;
+}
+
+.filter-panel__label {
   text-decoration: underline;
   text-decoration-color: var(--color-accent);
   text-underline-offset: 0.2em;
+}
+
+.filter-panel__status {
+  color: var(--color-muted);
+  font-size: 0.8em;
+  margin-left: 0.3rem;
+}
+
+.filter-groups {
+  display: grid;
+  gap: 1rem 1.5rem;
+  grid-template-columns: repeat(2, minmax(12rem, 1fr));
+  padding-top: 1rem;
+}
+
+.filter-group__title {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.45rem;
+  text-transform: uppercase;
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  padding-top: 0.9rem;
 }
 
 .recipe-count {
@@ -172,6 +196,10 @@ html.recipe-effects-enabled .recipe-wrapper.visible {
   .filter-panel,
   .recipe-count {
     margin-top: 0.85rem;
+  }
+
+  .filter-groups {
+    grid-template-columns: 1fr;
   }
 
   .recipes {

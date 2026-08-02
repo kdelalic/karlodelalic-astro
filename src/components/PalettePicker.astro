@@ -9,11 +9,12 @@ import "./palette-picker.scss"
     id="palette-picker"
     class="palette-picker__select"
     data-palette-picker
-    aria-label="Color palette"
   >
     {
       palettes.map((palette) => (
-        <option value={palette.id}>{palette.emoji}</option>
+        <option value={palette.id}>
+          {palette.emoji} {palette.name}
+        </option>
       ))
     }
   </select>
@@ -26,7 +27,8 @@ import "./palette-picker.scss"
   const picker = document.querySelector<HTMLSelectElement>(
     "[data-palette-picker]"
   )
-  const storageKey = "karlodelalic-palette"
+  const preferenceKey = "karlodelalic-palette"
+  const sessionKey = "karlodelalic-palette-session"
 
   const applyPalette = (paletteId: string) => {
     const palette = palettes.find((entry) => entry.id === paletteId)
@@ -40,7 +42,8 @@ import "./palette-picker.scss"
     applyPaletteFavicon(palette)
 
     try {
-      sessionStorage.setItem(storageKey, palette.id)
+      localStorage.setItem(preferenceKey, palette.id)
+      sessionStorage.setItem(sessionKey, palette.id)
     } catch {
       // The palette still applies when storage is unavailable.
     }

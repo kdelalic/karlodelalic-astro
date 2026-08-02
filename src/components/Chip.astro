@@ -1,19 +1,33 @@
 ---
-import "./chip.scss";
+import "./chip.scss"
 
 interface Props {
-  active?: boolean;
-  label: string;
-  "data-tag"?: string;
+  active?: boolean
+  label: string
+  "data-tag"?: string
 }
 
-const { active = false, label, "data-tag": dataTag } = Astro.props;
+const { active = false, label, "data-tag": dataTag } = Astro.props
 
-const classNames = ["chip"];
-if (active) classNames.push("active");
-if (dataTag) classNames.push("button");
+const classNames = ["chip"]
+if (active) classNames.push("active")
+if (dataTag) classNames.push("button")
 ---
 
-<button type="button" class:list={classNames} data-tag={dataTag}>
-  <span class="chip__label noselect">{label}</span>
-</button>
+{
+  dataTag ? (
+    <button
+      type="button"
+      class:list={classNames}
+      data-tag={dataTag}
+      aria-pressed={active}
+      aria-label={`Filter by ${label}`}
+    >
+      <span class="chip__label noselect" aria-hidden="true">{label}</span>
+    </button>
+  ) : (
+    <span class:list={classNames}>
+      <span class="chip__label">{label}</span>
+    </span>
+  )
+}

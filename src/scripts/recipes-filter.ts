@@ -5,6 +5,10 @@ const recipeWrappers = recipesList
 const filterChips = Array.from(
   document.querySelectorAll<HTMLButtonElement>("#tag-chips .chip[data-tag]")
 )
+const filterGroups = Array.from(
+  document.querySelectorAll<HTMLElement>("[data-filter-group]")
+)
+const filterStatus = document.querySelector<HTMLElement>("#filter-status")
 const recipeCount = document.querySelector<HTMLElement>("#recipe-count")
 const noRecipes = document.querySelector<HTMLElement>("#no-recipes")
 
@@ -65,13 +69,17 @@ const getTags = (recipe: HTMLElement) => {
 }
 
 const syncChipState = () => {
-  document
-    .querySelectorAll<HTMLButtonElement>(".chip[data-tag]")
-    .forEach((chip) => {
-      const isActive = activeFilters.has(chip.dataset.tag ?? "")
-      chip.classList.toggle("active", isActive)
-      chip.setAttribute("aria-pressed", String(isActive))
-    })
+  filterChips.forEach((chip) => {
+    const isActive = activeFilters.has(chip.dataset.tag ?? "")
+    chip.classList.toggle("active", isActive)
+    chip.setAttribute("aria-pressed", String(isActive))
+  })
+
+  if (filterStatus) {
+    filterStatus.textContent = activeFilters.size
+      ? `(${activeFilters.size} selected)`
+      : ""
+  }
 }
 
 const updateVisibleTags = () => {
@@ -85,6 +93,10 @@ const updateVisibleTags = () => {
   filterChips.forEach((chip) => {
     const tag = chip.dataset.tag ?? ""
     chip.hidden = !activeFilters.has(tag) && !visibleTags.has(tag)
+  })
+
+  filterGroups.forEach((group) => {
+    group.hidden = !group.querySelector(".chip:not([hidden])")
   })
 }
 
@@ -122,15 +134,6 @@ filterChips.forEach((chip) => {
     const tag = chip.dataset.tag
     if (tag) toggleFilter(tag)
   })
-})
-
-document.addEventListener("click", (event) => {
-  const target = event.target as HTMLElement
-  const chip = target.closest<HTMLButtonElement>(
-    ".recipe__tags .chip[data-tag]"
-  )
-  const tag = chip?.dataset.tag
-  if (tag) toggleFilter(tag)
 })
 
 window.addEventListener("recipeSearch", (event) => {
